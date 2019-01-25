@@ -7,34 +7,63 @@
     tools:context=".MainActivity"
     android:background="@drawable/background">
 
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="   WE PLAY WITH"
+        android:textColor="#000000"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:textStyle="bold|italic"
+        android:textSize="30dp"
+
+        android:background="#84ffffff"/>
+
+    <TextView
+        android:layout_marginTop="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="   CLAY"
+        android:textColor="#000000"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:textStyle="bold|italic"
+        android:textSize="30dp"
+
+        android:background="#84ffffff"/>
+
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/logoo"
         android:layout_gravity="right" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="5dp">
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp">
 
         <ImageView
+            android:padding="10dp"
         android:id="@+id/admin"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/admin"
-        android:layout_margin="2dp"/>
+        android:src="@drawable/admin"
+        android:layout_margin="5dp"
+            android:background="#84ffffff"/>
 
         <ImageView
+            android:padding="10dp"
             android:layout_marginRight="20dp"
             android:id="@+id/user"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/user"
-            android:layout_margin="2dp"/>
+            android:src="@drawable/user"
+            android:layout_margin="5dp"
+            android:background="#84ffffff"/>
 
 
     </LinearLayout>
