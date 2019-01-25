@@ -1,12 +1,19 @@
 package com.shivam.app_ka_kaam;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.shivam.app_ka_kaam.User.user;
+import com.shivam.app_ka_kaam.sampleUtil.Constants;
 import com.shivam.app_ka_kaam.sampleUtil.Employee;
 
 import java.io.BufferedReader;
@@ -39,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         userbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +59,27 @@ finish();
 
 
 
+
+
+
+
+
+        //////////////////////////////////////////////////////////
+
+//        String s = String.valueOf(FirebaseInstanceId.getInstance().getToken());
+//        Log.d("TokenHere", "onCreate: "+s);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel(Constants.CHANNEL_ID,Constants.CHANNEL_NAME,NotificationManager.IMPORTANCE_HIGH);
+
+            channel.setDescription(Constants.CHANNEL_DESCRIPTION);
+            channel.enableLights(true);
+            channel.setLightColor(Color.RED);
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[] {100,200,300,400,500,400,300,200,400});
+            notificationManager.createNotificationChannel(channel);
+        }
 
 
 
