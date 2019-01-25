@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "812779223448",
+    "firebase_url": "https://appkakaam.firebaseio.com",
+    "project_id": "appkakaam",
+    "storage_bucket": "appkakaam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812779223448:android:434391d0a3f6bc18",
+        "android_client_info": {
+          "package_name": "com.shivam.app_ka_kaam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812779223448-rjkocvump20vemif8k72sljdhvm2erjo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shivam.app_ka_kaam",
+            "certificate_hash": "3ecfa08aa5f241c099ca7496197e671537f00323"
+          }
+        },
+        {
+          "client_id": "812779223448-b4qma5s9ij4ntucoec0f1gn8icrn8cbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkqF5etO6WqFYrZfYeHlrpPOEl20aefH8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812779223448-b4qma5s9ij4ntucoec0f1gn8icrn8cbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
