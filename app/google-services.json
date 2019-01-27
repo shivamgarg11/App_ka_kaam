@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "812779223448-jsccfhhbfunekqmaja77jqpd832mt2rg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shivam.app_ka_kaam",
+            "certificate_hash": "73b95d1dfae420e03dad6dff2d89ca279acc5995"
+          }
+        },
+        {
           "client_id": "812779223448-b4qma5s9ij4ntucoec0f1gn8icrn8cbk.apps.googleusercontent.com",
           "client_type": 3
         }

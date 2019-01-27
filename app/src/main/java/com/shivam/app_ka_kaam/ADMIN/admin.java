@@ -1,4 +1,4 @@
-package com.shivam.app_ka_kaam.User;
+package com.shivam.app_ka_kaam.ADMIN;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,15 +9,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.shivam.app_ka_kaam.MainActivity;
+import com.shivam.app_ka_kaam.User.oil_input;
 import com.shivam.app_ka_kaam.R;
 
-public class user extends AppCompatActivity {
+public class admin extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_admin);
+
 
         ////////////getting from firebase/////////////////////////
         final String[] oilarray={"MAIN TANK","TUNNEL TANK"};
@@ -29,7 +30,7 @@ public class user extends AppCompatActivity {
 
 
 
-        final LinearLayout oil=findViewById(R.id.useroil);
+        LinearLayout oil=findViewById(R.id.useroil);
         LinearLayout gas=findViewById(R.id.usergas);
         LinearLayout electricity=findViewById(R.id.userelectricity);
 
@@ -40,7 +41,7 @@ public class user extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                AlertDialog dialog=new AlertDialog.Builder(user.this)
+                AlertDialog dialog=new AlertDialog.Builder(admin.this)
                         .setTitle("              OIL")
                         .setSingleChoiceItems(oilarray, 1, new DialogInterface.OnClickListener() {
                             @Override
@@ -51,10 +52,8 @@ public class user extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(user.this, "You selected " + oilarray[selected], Toast.LENGTH_SHORT).show();
-                                Intent i=new Intent(user.this,oil_input.class);
-                                i.putExtra("path",oilarray[selected]);
-                                startActivity(i);
+                                Toast.makeText(admin.this, "You selected " + oilarray[selected], Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(admin.this,oil_input.class));
                                 finish();
 
                             }
@@ -76,7 +75,7 @@ public class user extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                AlertDialog dialog=new AlertDialog.Builder(user.this)
+                AlertDialog dialog=new AlertDialog.Builder(admin.this)
                         .setTitle("              GAS")
                         .setSingleChoiceItems(gasarray, 1, new DialogInterface.OnClickListener() {
                             @Override
@@ -87,11 +86,8 @@ public class user extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(user.this, "You selected " + gasarray[selected], Toast.LENGTH_SHORT).show();
-                                Intent i=new Intent(user.this,gas_input.class);
-                                i.putExtra("path",gasarray[selected]);
-                                startActivity(i);
-                                finish();                            }
+                                Toast.makeText(admin.this, "You selected " + gasarray[selected], Toast.LENGTH_SHORT).show();
+                            }
                         })
                         .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                             @Override
@@ -109,7 +105,7 @@ public class user extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                AlertDialog dialog=new AlertDialog.Builder(user.this)
+                AlertDialog dialog=new AlertDialog.Builder(admin.this)
                         .setTitle("          ELECTRICITY")
                         .setSingleChoiceItems(electricityarray, 1, new DialogInterface.OnClickListener() {
                             @Override
@@ -120,11 +116,7 @@ public class user extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(user.this, "You selected " + electricityarray[selected], Toast.LENGTH_SHORT).show();
-                                Intent i=new Intent(user.this,electricity_input.class);
-                                i.putExtra("path",electricityarray[selected]);
-                                startActivity(i);
-                                finish();
+                                Toast.makeText(admin.this, "You selected " + electricityarray[selected], Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("Back", new DialogInterface.OnClickListener() {
@@ -140,3 +132,5 @@ public class user extends AppCompatActivity {
 
     }
 }
+
+

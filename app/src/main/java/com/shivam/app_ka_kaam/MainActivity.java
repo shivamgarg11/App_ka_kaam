@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.shivam.app_ka_kaam.ADMIN.admin;
 import com.shivam.app_ka_kaam.User.user;
 import com.shivam.app_ka_kaam.sampleUtil.Employee;
 
@@ -17,7 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.shivam.app_ka_kaam.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
         adminbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity.this,admin.class));
+                finish();
             }
         });
 
