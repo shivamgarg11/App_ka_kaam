@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.shivam.app_ka_kaam.User.oil_input;
 import com.shivam.app_ka_kaam.R;
 
 public class admin extends AppCompatActivity {
@@ -53,8 +51,8 @@ public class admin extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(admin.this, "You selected " + oilarray[selected], Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(admin.this,oil_input.class));
-                                finish();
+                              //  startActivity(new Intent(admin.this,oil_input.class));
+                              //  finish();
 
                             }
                         })

@@ -6,12 +6,17 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.shivam.app_ka_kaam.R;
 
 public class gas_input extends AppCompatActivity {
@@ -32,8 +37,6 @@ public class gas_input extends AppCompatActivity {
        gettimedate(gas_input.this,datetime);
 
 
-
-
         Button close =findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +53,7 @@ public class gas_input extends AppCompatActivity {
             public void onClick(View v) {
 
                 EditText gasinput=findViewById(R.id.gasinput);
-                String data=gasinput.getText().toString();
+                final String data=gasinput.getText().toString();
 
                 final AlertDialog alertDialog = new AlertDialog.Builder(gas_input.this)
                         .setTitle("CONFIRMATION:")
@@ -66,9 +69,29 @@ public class gas_input extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 //WRITING TO FIREBASE
-                               FirebaseDatabase database = FirebaseDatabase.getInstance();
-                               DatabaseReference myRef = database.getReference("GAS");
-                               myRef.child(pathway).child("year").child("month").child("date").setValue("Hello, World!");
+
+                                String year=timegas.substring(6,10);
+                                String month=timegas.substring(3,5);
+                                final String date=timegas.substring(0,2);
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                final DatabaseReference myRef = database.getReference("GAS").child(pathway).child(year).child(month);
+
+                                myRef.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if(!dataSnapshot.hasChild(date)){
+                                            myRef.child(date).setValue(data);
+                                    }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError error) {
+                                        // Failed to read value
+                                        Log.w("TAG", "Failed to read value.", error.toException());
+                                    }
+                                });
+
+
 
 
                             }
