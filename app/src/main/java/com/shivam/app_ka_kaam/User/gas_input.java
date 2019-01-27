@@ -10,7 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.shivam.app_ka_kaam.R;
 
 public class gas_input extends AppCompatActivity {
@@ -22,7 +23,7 @@ public class gas_input extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gas_input);
 
-        String pathway=getIntent().getStringExtra("path");
+        final String pathway=getIntent().getStringExtra("path");
         TextView path=findViewById(R.id.path);
         path.setText("USER/GAS/"+pathway);
 
@@ -65,12 +66,15 @@ public class gas_input extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 //WRITING TO FIREBASE
-
+                               FirebaseDatabase database = FirebaseDatabase.getInstance();
+                               DatabaseReference myRef = database.getReference("GAS");
+                               myRef.child(pathway).child("year").child("month").child("date").setValue("Hello, World!");
 
 
                             }
-                        }).create();
-                alertDialog.show();
+                        })
+                        .create();
+                        alertDialog.show();
 
             }
         });
