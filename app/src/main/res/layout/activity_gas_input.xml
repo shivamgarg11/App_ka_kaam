@@ -39,7 +39,7 @@
         android:text="DATE AND TIME "
         style="@style/TextAppearance.AppCompat.Headline"
         android:textStyle="bold"
-        android:background="#84ffffff"
+        android:background="#bfffffff"
         android:padding="2dp"/>
 
      <TextView
@@ -55,11 +55,11 @@
 
 
     <android.support.design.widget.TextInputLayout
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:padding="5dp"
-        android:background="#84ffffff">
+        android:background="#bfffffff">
         <EditText
             android:id="@+id/gasinput"
             android:layout_width="match_parent"
@@ -73,7 +73,7 @@
 
 
     <TextView
-        android:background="#84ffffff"
+        android:background="#bfffffff"
         android:textSize="20dp"
         android:textStyle="bold"
         android:textColor="#a70c0c"

@@ -1,5 +1,6 @@
 package com.shivam.app_ka_kaam.ADMIN;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -15,5 +16,13 @@ public class oil_output extends AppCompatActivity {
         String pathway=getIntent().getStringExtra("path");
         TextView path=findViewById(R.id.path);
         path.setText("ADMIN/ELECTRICITY/"+pathway);
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(oil_output.this, admin.class));
+        finish();
     }
 }

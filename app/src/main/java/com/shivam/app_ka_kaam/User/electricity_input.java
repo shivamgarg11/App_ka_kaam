@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.shivam.app_ka_kaam.MainActivity;
 import com.shivam.app_ka_kaam.R;
 
 public class electricity_input extends AppCompatActivity {
@@ -92,7 +93,7 @@ public class electricity_input extends AppCompatActivity {
 
             public void onLocationChanged(android.location.Location location) {
 
-                timeelectricity = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS").format(location.getTime());
+                timeelectricity = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(location.getTime());
 
                 if( location.getProvider().equals(android.location.LocationManager.GPS_PROVIDER)){
                     android.util.Log.d("Location", "Time GPS: " + timeelectricity); // This is what we want!
@@ -124,7 +125,19 @@ public class electricity_input extends AppCompatActivity {
 
 
     }
+
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(electricity_input.this, user.class));
+        finish();
+    }
+
 }
+
+
+
 
 
 

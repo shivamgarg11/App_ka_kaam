@@ -37,7 +37,7 @@
         android:text="DATE AND TIME "
         style="@style/TextAppearance.AppCompat.Headline"
         android:textStyle="bold"
-        android:background="#84ffffff"
+        android:background="#a7ffffff"
         android:padding="2dp"/>
 
     <TextView
@@ -52,50 +52,50 @@
         android:padding="2dp"/>
 
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <android.support.design.widget.TextInputLayout
-        android:layout_weight="1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#84ffffff"
-        android:layout_marginTop="30dp">
-
-        <EditText
-            android:id="@+id/oilinput1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="ENTER INPUT 1"
-            android:gravity="center"
-            android:inputType="number"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-
-    <TextView
-        android:paddingTop="25dp"
-        android:paddingBottom="5dp"
-        android:layout_gravity="bottom"
-        android:background="#84ffffff"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:textColor="#a70c0c"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" RANGE ( A TO B ) "/>
-</LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#bfffffff"
+        android:layout_marginTop="10dp">
         <android.support.design.widget.TextInputLayout
             android:layout_weight="1"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/oilinput1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ENTER INPUT 1"
+                android:gravity="center"
+                android:inputType="number"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <TextView
+            android:paddingBottom="10dp"
+            android:layout_gravity="bottom"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:textColor="#a70c0c"
+            android:gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#84ffffff"
-            android:layout_marginTop="5dp">
+            android:text=" RANGE ( A TO B ) "/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#bfffffff"
+        android:layout_marginTop="10dp">
+        <android.support.design.widget.TextInputLayout
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/oilinput2"
@@ -109,11 +109,9 @@
 
 
         <TextView
-            android:paddingTop="25dp"
-            android:paddingBottom="5dp"
+            android:paddingBottom="10dp"
             android:layout_gravity="bottom"
-            android:background="#84ffffff"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="#a70c0c"
             android:gravity="center"
@@ -125,13 +123,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#bfffffff"
+        android:layout_marginTop="10dp">
         <android.support.design.widget.TextInputLayout
             android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#84ffffff"
-            android:layout_marginTop="5dp">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/oilinput3"
@@ -145,11 +143,9 @@
 
 
         <TextView
-            android:paddingTop="25dp"
-            android:paddingBottom="5dp"
+            android:paddingBottom="10dp"
             android:layout_gravity="bottom"
-            android:background="#84ffffff"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="#a70c0c"
             android:gravity="center"
@@ -161,13 +157,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#bfffffff"
+        android:layout_marginTop="10dp">
         <android.support.design.widget.TextInputLayout
             android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#84ffffff"
-            android:layout_marginTop="5dp">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/oilinput4"
@@ -181,11 +177,9 @@
 
 
         <TextView
-            android:paddingTop="25dp"
-            android:paddingBottom="5dp"
+            android:paddingBottom="10dp"
             android:layout_gravity="bottom"
-            android:background="#84ffffff"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="#a70c0c"
             android:gravity="center"
@@ -193,6 +187,8 @@
             android:layout_height="wrap_content"
             android:text=" RANGE ( A TO B ) "/>
     </LinearLayout>
+
+
 
     <LinearLayout
         android:background="#88a19797"

@@ -96,7 +96,7 @@ public class oil_input extends AppCompatActivity {
 
             public void onLocationChanged(android.location.Location location) {
 
-                timeoil = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS").format(location.getTime());
+                timeoil = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(location.getTime());
 
                 if( location.getProvider().equals(android.location.LocationManager.GPS_PROVIDER)){
                     android.util.Log.d("Location", "Time GPS: " + timeoil); // This is what we want!
@@ -128,6 +128,14 @@ public class oil_input extends AppCompatActivity {
 
 
     }
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(oil_input.this, user.class));
+        finish();
+    }
+
 }
 
 
