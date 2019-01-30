@@ -139,4 +139,10 @@ public class user extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(user.this, MainActivity.class));
+        finish();
+    }
 }

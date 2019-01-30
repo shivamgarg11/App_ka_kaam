@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import com.shivam.app_ka_kaam.MainActivity;
 import com.shivam.app_ka_kaam.R;
 
 public class admin extends AppCompatActivity {
@@ -51,8 +52,10 @@ public class admin extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(admin.this, "You selected " + oilarray[selected], Toast.LENGTH_SHORT).show();
-                              //  startActivity(new Intent(admin.this,oil_input.class));
-                              //  finish();
+                                Intent i=new Intent(admin.this,oil_output.class);
+                                i.putExtra("path",oilarray[selected]);
+                                startActivity(i);
+                                finish();
 
                             }
                         })
@@ -85,6 +88,12 @@ public class admin extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(admin.this, "You selected " + gasarray[selected], Toast.LENGTH_SHORT).show();
+                                Intent i=new Intent(admin.this,gas_output.class);
+                                i.putExtra("path",gasarray[selected]);
+                                startActivity(i);
+                                finish();
+
+
                             }
                         })
                         .setNegativeButton("Back", new DialogInterface.OnClickListener() {
@@ -115,6 +124,12 @@ public class admin extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(admin.this, "You selected " + electricityarray[selected], Toast.LENGTH_SHORT).show();
+                                Intent i=new Intent(admin.this,electricity_output.class);
+                                i.putExtra("path",electricityarray[selected]);
+                                startActivity(i);
+                                finish();
+
+
                             }
                         })
                         .setNegativeButton("Back", new DialogInterface.OnClickListener() {
@@ -128,6 +143,12 @@ public class admin extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(admin.this, MainActivity.class));
+        finish();
     }
 }
 
