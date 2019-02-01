@@ -20,14 +20,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.Java_objects.gas_object;
+import com.shivam.app_ka_kaam.Java_objects.gasconstants;
 import com.shivam.app_ka_kaam.Java_objects.gaslastvalue;
+import com.shivam.app_ka_kaam.MainActivity;
 import com.shivam.app_ka_kaam.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class gas_input extends AppCompatActivity {
 
     static String  timegas="";
     String pathway="";
-    final gaslastvalue[] lastvalue = new gaslastvalue[1];
+     gaslastvalue[] lastvalue = new gaslastvalue[1];
+     gasconstants[] constant = new gasconstants[1];
     AlertDialog alertDialog;
     ProgressBar loader;
 
@@ -80,8 +88,10 @@ public class gas_input extends AppCompatActivity {
         loader.setVisibility(View.VISIBLE);
         FancyToast.makeText(this, "WAIT WHILE WE ARE MAKING EVERYTHING READY ", FancyToast.LENGTH_SHORT,FancyToast.WARNING,false).show();
 
+
                 alertDialog = new AlertDialog.Builder(gas_input.this)
-                .setTitle("CONFIRMATION:")
+                        .setIcon(R.drawable.logoo)
+                .setTitle("CONFIRMATION")
                 .setMessage("\nDATA : "+data+"\n\n")
                 .setNegativeButton("BACK", new DialogInterface.OnClickListener() {
                     @Override
@@ -105,7 +115,7 @@ public class gas_input extends AppCompatActivity {
 
 
                         //Writing lastvalue
-                        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                         FirebaseDatabase database1 = FirebaseDatabase.getInstance();
                         final DatabaseReference myRef1 = database1.getReference("GAS"+pathway).child("LASTVALUE");
 
                         myRef.addValueEventListener(new ValueEventListener() {
@@ -114,11 +124,33 @@ public class gas_input extends AppCompatActivity {
                                 if(!dataSnapshot.hasChild(date+"")){
                                     gas_object obj=insertvalues(Integer.valueOf(data));
                                     myRef.child(date+"").setValue(obj);
+                                    FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING ", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
+                                    startActivity(new Intent(gas_input.this, MainActivity.class));
+                                    finish();
+
                                 }else{
-                                    gas_object obj=insertvalues(Integer.valueOf(data));
-                                    myRef.child(date+"").setValue(obj);
 
+                                   AlertDialog.Builder override=new AlertDialog.Builder(gas_input.this)
+                                           .setIcon(R.drawable.logoo)
+                                           .setTitle("DO YOU WANT TO OVERWRITE THE DATA").setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                               @Override
+                                               public void onClick(DialogInterface dialog, int which) {
 
+                                               }
+                                           })
+                                           .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                               @Override
+                                               public void onClick(DialogInterface dialog, int which) {
+                                                   gas_object obj=insertvalues(Integer.valueOf(data));
+                                                   myRef.child(date+"").setValue(obj);
+                                                   FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING ", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
+                                                   startActivity(new Intent(gas_input.this, MainActivity.class));
+                                                   finish();
+
+                                               }
+                                           });
+                                   override.create();
+                                   override.show();
 
                                 }
 
@@ -142,31 +174,72 @@ public class gas_input extends AppCompatActivity {
 
 
 
-    ///NEED TO DO FROM FIREBASE FOR CONSTANT VALUES
-    public  gas_object insertvalues(final int input){
+    public  gas_object insertvalues(int input){
         gas_object obj = new gas_object();
 
            Log.e("TAG", "insertvalues: " + lastvalue[0].getValue());
            obj.setInput(input);
            obj.setTime(Integer.valueOf(timegas.substring(11, 13)));
            obj.setDifference(input-lastvalue[0].getValue());
-           obj.setScm(0);
-           obj.setMmbto(0);
-           obj.setRide(0);
-           obj.setBill(0);
+           obj.setScm(obj.getDifference()*constant[0].getC1());
+           obj.setMmbto(obj.getScm()*constant[0].getC2()*constant[0].getC3());
+           obj.setRide(obj.getMmbto()*constant[0].getC4());
+
+        final int year=Integer.valueOf(timegas.substring(6,10));
+        final int month=Integer.valueOf(timegas.substring(3,5));
+        final int date=Integer.valueOf(timegas.substring(0,2));
+
+        SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
+        String inputString1 = lastvalue[0].getDate()+" "+lastvalue[0].getMonth()+" "+lastvalue[0].getYear();
+        String inputString2 = date+" "+month+" "+year;
+
+        try {
+            Date date1 = myFormat.parse(inputString1);
+            Date date2 = myFormat.parse(inputString2);
+            long diff = (TimeUnit.DAYS.convert(date2.getTime() - date1.getTime(), TimeUnit.HOURS)/24)*24;
+
+            if(diff==0){
+                diff=Integer.valueOf(timegas.substring(11,13))-lastvalue[0].getTime();
+            }
+            if(diff==0){
+                diff=1;
+            }
+            obj.setBill((obj.getRide()*15*24)/diff);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+
 
 
         return  obj;
 
     }
 
-
-
-
-
     public void getprevoiusdata(){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("GAS"+pathway).child("LASTVALUE");
+
+        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef1 = database1.getReference("GAS"+pathway).child("CONSTANTS");
+
+
+
+        myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                constant[0] =dataSnapshot.getValue(gasconstants.class);
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("TAG", "Failed to read value.", error.toException());
+            }
+        });
+
 
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -187,12 +260,7 @@ public class gas_input extends AppCompatActivity {
 
     }
 
-
-
-
-
-
-    public static void gettimedate(Context context, final TextView datetime){
+    public void gettimedate(Context context, final TextView datetime){
 
         android.location.LocationManager locationManager = (android.location.LocationManager)
                 context.getSystemService(android.content.Context.LOCATION_SERVICE);
@@ -205,10 +273,13 @@ public class gas_input extends AppCompatActivity {
 
                 if( location.getProvider().equals(android.location.LocationManager.GPS_PROVIDER)){
                     android.util.Log.d("Location", "Time GPS: " + timegas); // This is what we want!
-                    datetime.setText(timegas); }
+                    datetime.setText(timegas);
+                    loader.setVisibility(View.GONE);
+                }
                 else {
                     android.util.Log.d("Location", "Time Device (" + location.getProvider() + "): " + timegas);
-                    datetime.setText(timegas);}
+                    datetime.setText(timegas);
+                    loader.setVisibility(View.GONE);}
 
 
             }
@@ -229,11 +300,8 @@ public class gas_input extends AppCompatActivity {
         locationManager.requestLocationUpdates(android.location.LocationManager.NETWORK_PROVIDER, 100, 0, locationListener);
         locationManager.requestLocationUpdates(android.location.LocationManager.GPS_PROVIDER, 100, 0, locationListener);
 
-        datetime.setText(timegas);
-
 
     }
-
 
     @Override
     public void onBackPressed() {

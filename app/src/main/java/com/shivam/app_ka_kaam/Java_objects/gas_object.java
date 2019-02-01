@@ -4,16 +4,16 @@ public class gas_object {
     int input;
     int time;
     int difference;
-    int scm;
-    int mmbto;
-    int ride;
-    int bill;
+    double scm;
+    double mmbto;
+    double ride;
+    double bill;
 
     public gas_object(){
 
     }
 
-    public gas_object(int input, int time, int difference, int scm, int mmbto, int ride, int bill) {
+    public gas_object(int input, int time, int difference, double scm, double mmbto, double ride, double bill) {
         this.input = input;
         this.time = time;
         this.difference = difference;
@@ -36,19 +36,19 @@ public class gas_object {
         return difference;
     }
 
-    public int getScm() {
+    public double getScm() {
         return scm;
     }
 
-    public int getMmbto() {
+    public double getMmbto() {
         return mmbto;
     }
 
-    public int getRide() {
+    public double getRide() {
         return ride;
     }
 
-    public int getBill() {
+    public double getBill() {
         return bill;
     }
 
@@ -64,19 +64,19 @@ public class gas_object {
         this.difference = difference;
     }
 
-    public void setScm(int scm) {
+    public void setScm(double scm) {
         this.scm = scm;
     }
 
-    public void setMmbto(int mmbto) {
+    public void setMmbto(double mmbto) {
         this.mmbto = mmbto;
     }
 
-    public void setRide(int ride) {
+    public void setRide(double ride) {
         this.ride = ride;
     }
 
-    public void setBill(int bill) {
+    public void setBill(double bill) {
         this.bill = bill;
     }
 }

@@ -17,7 +17,7 @@ public class gas_output extends AppCompatActivity {
 
         String pathway=getIntent().getStringExtra("path");
         TextView path=findViewById(R.id.path);
-        path.setText("ADMIN/ELECTRICITY/"+pathway);
+        path.setText("ADMIN/GAS/"+pathway);
     }
 
 

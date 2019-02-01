@@ -41,6 +41,7 @@ public class user extends AppCompatActivity {
             public void onClick(View v) {
 
                 AlertDialog dialog=new AlertDialog.Builder(user.this)
+                        .setIcon(R.drawable.logoo)
                         .setTitle("              OIL")
                         .setSingleChoiceItems(oilarray, 1, new DialogInterface.OnClickListener() {
                             @Override
@@ -51,7 +52,8 @@ public class user extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                FancyToast.makeText(user.this, "You selected " + oilarray[selected], FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
+                                FancyToast.makeText(user.this, "WAIT FOR AUTOMATIC DATE AND TIME", FancyToast.LENGTH_SHORT,FancyToast.WARNING,false).show();
+
                                 Intent i=new Intent(user.this,oil_input.class);
                                 i.putExtra("path",oilarray[selected]);
                                 startActivity(i);
@@ -77,6 +79,7 @@ public class user extends AppCompatActivity {
             public void onClick(View v) {
 
                 AlertDialog dialog=new AlertDialog.Builder(user.this)
+                        .setIcon(R.drawable.logoo)
                         .setTitle("              GAS")
                         .setSingleChoiceItems(gasarray, 1, new DialogInterface.OnClickListener() {
                             @Override
@@ -87,7 +90,8 @@ public class user extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                FancyToast.makeText(user.this, "You selected " + gasarray[selected], FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
+                                FancyToast.makeText(user.this, "WAIT FOR AUTOMATIC DATE AND TIME", FancyToast.LENGTH_SHORT,FancyToast.WARNING,false).show();
+
                                 Intent i=new Intent(user.this,gas_input.class);
                                 i.putExtra("path",gasarray[selected]);
                                 startActivity(i);
@@ -110,6 +114,7 @@ public class user extends AppCompatActivity {
             public void onClick(View v) {
 
                 AlertDialog dialog=new AlertDialog.Builder(user.this)
+                        .setIcon(R.drawable.logoo)
                         .setTitle("          ELECTRICITY")
                         .setSingleChoiceItems(electricityarray, 1, new DialogInterface.OnClickListener() {
                             @Override
@@ -120,7 +125,7 @@ public class user extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                FancyToast.makeText(user.this, "You selected " + electricityarray[selected], FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
+                                FancyToast.makeText(user.this, "WAIT FOR AUTOMATIC DATE AND TIME", FancyToast.LENGTH_SHORT,FancyToast.WARNING,false).show();
                                 Intent i=new Intent(user.this,electricity_input.class);
                                 i.putExtra("path",electricityarray[selected]);
                                 startActivity(i);
