@@ -94,22 +94,42 @@
         android:layout_height="wrap_content"
         android:weightSum="4">
 
-        <Button
+        <TextView
             android:layout_marginLeft="50dp"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#555"/>
+
+        <Button
             android:layout_weight="1"
             android:id="@+id/close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/close"/>
 
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#555"/>
+
+
+        <TextView
+            android:layout_marginLeft="100dp"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#555"/>
 
         <Button
-            android:layout_marginLeft="100dp"
             android:layout_weight="1"
             android:id="@+id/done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/done"/>
+
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#555"/>
 
     </LinearLayout>
 

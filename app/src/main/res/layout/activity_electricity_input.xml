@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,6 +8,11 @@
     android:background="@drawable/background"
     android:orientation="vertical">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,7 +73,7 @@
                 android:id="@+id/electricityinput1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ENTER INPUT 1"
+                android:hint="ENTER KWH"
                 android:gravity="center"
                 android:inputType="number"/>
 
@@ -101,7 +106,7 @@
                 android:id="@+id/electricityinput2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ENTER INPUT 2"
+                android:hint="ENTER KVAH"
                 android:gravity="center"
                 android:inputType="number"/>
 
@@ -135,7 +140,7 @@
                 android:id="@+id/electricityinput3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ENTER INPUT 3"
+                android:hint="ENTER METER P.F"
                 android:gravity="center"
                 android:inputType="number"/>
 
@@ -168,7 +173,7 @@
                 android:id="@+id/electricityinput4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ENTER INPUT 4"
+                android:hint="ENTER P.P.F"
                 android:gravity="center"
                 android:inputType="number"/>
 
@@ -188,34 +193,53 @@
     </LinearLayout>
 
     <LinearLayout
-        android:background="#88a19797"
+        android:background="#88ffffff"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="4">
 
-        <Button
+        <TextView
             android:layout_marginLeft="50dp"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#555"/>
+
+        <Button
             android:layout_weight="1"
             android:id="@+id/close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/close"/>
 
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#555"/>
+
+        <TextView
+            android:layout_marginLeft="100dp"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#555"/>
 
         <Button
-            android:layout_marginLeft="100dp"
             android:layout_weight="1"
             android:id="@+id/done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/done"/>
 
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#555"/>
+
     </LinearLayout>
 
 
     <LinearLayout
-        android:background="#88a19797"
+        android:background="#88ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="4">
@@ -243,4 +267,13 @@
 
     </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="visible"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:id="@+id/loader"/>
+
+</FrameLayout>

@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 public class gas_input extends AppCompatActivity {
 
-    static String  timegas="";
+     String  timegas="";
     String pathway="";
      gaslastvalue[] lastvalue = new gaslastvalue[1];
      gasconstants[] constant = new gasconstants[1];
