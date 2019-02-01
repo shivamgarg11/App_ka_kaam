@@ -1,17 +1,17 @@
 package com.shivam.app_ka_kaam.Java_objects;
 
-public class lastvalue {
+public class gaslastvalue {
     int date;
     int time;
     int month;
     int year;
     int value;
 
-    public lastvalue(){
+    public gaslastvalue(){
 
     }
 
-    public lastvalue(int date, int time, int month, int year, int value) {
+    public gaslastvalue(int date, int time, int month, int year, int value) {
         this.date = date;
         this.time = time;
         this.month = month;

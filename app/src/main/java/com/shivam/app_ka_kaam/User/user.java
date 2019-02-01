@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.MainActivity;
 import com.shivam.app_ka_kaam.R;
 
@@ -51,7 +51,7 @@ public class user extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(user.this, "You selected " + oilarray[selected], Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(user.this, "You selected " + oilarray[selected], FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
                                 Intent i=new Intent(user.this,oil_input.class);
                                 i.putExtra("path",oilarray[selected]);
                                 startActivity(i);
@@ -87,7 +87,7 @@ public class user extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(user.this, "You selected " + gasarray[selected], Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(user.this, "You selected " + gasarray[selected], FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
                                 Intent i=new Intent(user.this,gas_input.class);
                                 i.putExtra("path",gasarray[selected]);
                                 startActivity(i);
@@ -120,7 +120,7 @@ public class user extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(user.this, "You selected " + electricityarray[selected], Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(user.this, "You selected " + electricityarray[selected], FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
                                 Intent i=new Intent(user.this,electricity_input.class);
                                 i.putExtra("path",electricityarray[selected]);
                                 startActivity(i);

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -17,18 +18,26 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.Java_objects.gas_object;
-import com.shivam.app_ka_kaam.Java_objects.lastvalue;
+import com.shivam.app_ka_kaam.Java_objects.gaslastvalue;
 import com.shivam.app_ka_kaam.R;
 
 public class gas_input extends AppCompatActivity {
 
     static String  timegas="";
     String pathway="";
+    final gaslastvalue[] lastvalue = new gaslastvalue[1];
+    AlertDialog alertDialog;
+    ProgressBar loader;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gas_input);
+
+        loader=findViewById(R.id.loader);
 
         pathway=getIntent().getStringExtra("path");
         TextView path=findViewById(R.id.path);
@@ -67,8 +76,11 @@ public class gas_input extends AppCompatActivity {
     public void onclickbutton(){
         EditText gasinput=findViewById(R.id.gasinput);
         final String data=gasinput.getText().toString();
+        getprevoiusdata();
+        loader.setVisibility(View.VISIBLE);
+        FancyToast.makeText(this, "WAIT WHILE WE ARE MAKING EVERYTHING READY ", FancyToast.LENGTH_SHORT,FancyToast.WARNING,false).show();
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(gas_input.this)
+                alertDialog = new AlertDialog.Builder(gas_input.this)
                 .setTitle("CONFIRMATION:")
                 .setMessage("\nDATA : "+data+"\n\n")
                 .setNegativeButton("BACK", new DialogInterface.OnClickListener() {
@@ -83,44 +95,47 @@ public class gas_input extends AppCompatActivity {
 
                         //WRITING TO FIREBASE
 
-                        int year=Integer.valueOf(timegas.substring(6,10));
-                        int month=Integer.valueOf(timegas.substring(3,5));
+                        final int year=Integer.valueOf(timegas.substring(6,10));
+                        final int month=Integer.valueOf(timegas.substring(3,5));
                         final int date=Integer.valueOf(timegas.substring(0,2));
+
+                        //writing value
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         final DatabaseReference myRef = database.getReference("GAS"+pathway).child(year+"").child(month+"");
 
 
+                        //Writing lastvalue
+                        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                        final DatabaseReference myRef1 = database1.getReference("GAS"+pathway).child("LASTVALUE");
+
                         myRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.hasChild(date+"")){
+                                if(!dataSnapshot.hasChild(date+"")){
                                     gas_object obj=insertvalues(Integer.valueOf(data));
                                     myRef.child(date+"").setValue(obj);
                                 }else{
-
+                                    gas_object obj=insertvalues(Integer.valueOf(data));
+                                    myRef.child(date+"").setValue(obj);
 
 
 
                                 }
-                            }
 
+                            gaslastvalue obj=new gaslastvalue(date,Integer.valueOf(timegas.substring(11,13)),month,year,Integer.valueOf(data));
+                            myRef1.setValue(obj);
+                            }
                             @Override
                             public void onCancelled(DatabaseError error) {
                                 // Failed to read value
                                 Log.w("TAG", "Failed to read value.", error.toException());
                             }
                         });
-
-                        FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                        final DatabaseReference myRef1 = database1.getReference("GAS"+pathway);
-                        lastvalue temp1=new lastvalue(date,Integer.valueOf(timegas.substring(11,13)),month,year,Integer.valueOf(data));
-                        myRef1.child("LASTVALUE").setValue(temp1);
                     }
                 })
                 .create();
-        alertDialog.show();
-    }
 
+    }
 
 
 
@@ -129,44 +144,52 @@ public class gas_input extends AppCompatActivity {
 
     ///NEED TO DO FROM FIREBASE FOR CONSTANT VALUES
     public  gas_object insertvalues(final int input){
+        gas_object obj = new gas_object();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+           Log.e("TAG", "insertvalues: " + lastvalue[0].getValue());
+           obj.setInput(input);
+           obj.setTime(Integer.valueOf(timegas.substring(11, 13)));
+           obj.setDifference(input-lastvalue[0].getValue());
+           obj.setScm(0);
+           obj.setMmbto(0);
+           obj.setRide(0);
+           obj.setBill(0);
+
+
+        return  obj;
+
+    }
+
+
+
+
+
+    public void getprevoiusdata(){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("GAS"+pathway).child("LASTVALUE");
 
 
-        final lastvalue[] temp =new lastvalue[1];
-         final int[] difference = new int[1];
-        Log.e("TAG", "onDataChange:1  "+difference[0] );
-            myRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                        temp[0] = dataSnapshot.getValue(lastvalue.class);
-                        difference[0] =temp[0].getValue();
-                    Log.e("TAG", "onDataChange: "+difference[0] );
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                }
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                    Log.w("TAG", "Failed to read value.", error.toException());
-                }
-            });
+                lastvalue[0] =dataSnapshot.getValue(gaslastvalue.class);
+                alertDialog.show();
+                loader.setVisibility(View.GONE);
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("TAG", "Failed to read value.", error.toException());
+            }
+        });
 
 
-
-
-
-        gas_object obj=new gas_object();
-        obj.setInput(input);
-        obj.setTime(Integer.valueOf(timegas.substring(11,13)));
-        obj.setDifference(input-difference[0]);
-        obj.setScm(0);
-        obj.setMmbto(0);
-        obj.setRide(0);
-        obj.setBill(0);
-
-        return  obj;
     }
+
+
+
+
 
 
     public static void gettimedate(Context context, final TextView datetime){

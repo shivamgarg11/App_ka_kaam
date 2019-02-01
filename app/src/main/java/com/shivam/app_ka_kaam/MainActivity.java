@@ -17,8 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
 
 import com.shivam.app_ka_kaam.User.user;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
                         else {
 
-                            Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+                            FancyToast.makeText(this, "Permission Denied!", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
