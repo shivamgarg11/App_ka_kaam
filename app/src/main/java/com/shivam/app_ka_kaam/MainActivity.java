@@ -20,7 +20,6 @@ import android.widget.ImageView;
 
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
-
 import com.shivam.app_ka_kaam.User.user;
 import com.shivam.app_ka_kaam.sampleUtil.Constants;
 import com.shivam.app_ka_kaam.sampleUtil.Employee;
@@ -33,7 +32,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import com.shivam.app_ka_kaam.R;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -120,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void afterPerm()
     {
+        csvPart();
         ImageView adminbtn=findViewById(R.id.admin);
         ImageView userbtn=findViewById(R.id.user);
 
@@ -182,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
 
     //        String a = "1,2,4,5,6";
         Log.d("MessageFirst A", "onCreate: " + a);
-        String filePath = getApplicationContext().getFilesDir().getPath().toString() + "/Employee.csv";
+        String filePath = "/storage/emulated/0/Download/employee.csv";
+//        String
         try {
             String content = "Separe here integers by semi-colon";
             File file = new File(filePath);
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         BufferedReader br = null;
         try {
             String sCurrentLine;
-            br = new BufferedReader(new FileReader(getApplicationContext().getFilesDir().getPath().toString() + "/Employee.csv"));
+            br = new BufferedReader(new FileReader("/storage/emulated/0/Download/employee.csv"));
             while ((sCurrentLine = br.readLine()) != null) {
                 b = b + sCurrentLine;
             }
