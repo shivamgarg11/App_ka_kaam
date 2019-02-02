@@ -39,7 +39,8 @@
 
         <activity android:name=".ADMIN.gas_output" />
         <activity android:name=".ADMIN.oil_output" />
-        <activity android:name=".ADMIN.electricity_output"></activity>
+        <activity android:name=".ADMIN.electricity_output" />
+        <activity android:name=".ADMIN.gassummary"></activity>
     </application>
 
 </manifest>

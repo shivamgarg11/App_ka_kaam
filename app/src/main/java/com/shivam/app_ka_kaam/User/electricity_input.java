@@ -7,11 +7,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -133,7 +135,9 @@ public class electricity_input extends AppCompatActivity {
                                     electricity_object obj=insertvalues(data1,data2,data3,data4);
                                     myRef.child(date+"").setValue(obj);
                                     FancyToast.makeText(electricity_input.this, "THANK YOU FOR UPDATING ", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
-                                    startActivity(new Intent(electricity_input.this, MainActivity.class));
+                                    Toast toast= Toast.makeText(getApplicationContext(), "YOU HAVE BEEN LOGGED OUT", Toast.LENGTH_SHORT);
+                                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+                                    toast.show();                                    startActivity(new Intent(electricity_input.this, MainActivity.class));
                                     finish();
 
                                 }else{
@@ -152,6 +156,9 @@ public class electricity_input extends AppCompatActivity {
                                                     electricity_object obj=insertvalues(data1,data2,data3,data4);
                                                     myRef.child(date+"").setValue(obj);
                                                     FancyToast.makeText(electricity_input.this, "THANK YOU FOR UPDATING ", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
+                                                    Toast toast= Toast.makeText(getApplicationContext(), "YOU HAVE BEEN LOGGED OUT", Toast.LENGTH_SHORT);
+                                                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+                                                    toast.show();
                                                     startActivity(new Intent(electricity_input.this, MainActivity.class));
                                                     finish();
 
