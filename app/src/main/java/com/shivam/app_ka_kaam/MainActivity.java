@@ -170,9 +170,39 @@ public class MainActivity extends AppCompatActivity {
     public void fetchData()
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("GASMUKTA");
+        DatabaseReference gasRef = database.getReference("GASMUKTA");
+        DatabaseReference electMeena = database.getReference("ELECTRICITYMEENA");
+        DatabaseReference electMukta = database.getReference("ELECTRICITYMUKTA");
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        electMukta.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String,String> value = (Map<String,String>)dataSnapshot.getValue();
+                Log.d("FetchedElectMukta", "Value is: " + value.toString());
+                Log.d("FetchedELectMukta", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        electMeena.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String,String> value = (Map<String,String>)dataSnapshot.getValue();
+                Log.d("FetchedElectMeena", "Value is: " + value.toString());
+                Log.d("FetchedELectMeena", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        gasRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
