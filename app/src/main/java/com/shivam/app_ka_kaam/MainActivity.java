@@ -18,11 +18,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
 import com.shivam.app_ka_kaam.User.user;
+import com.shivam.app_ka_kaam.response.Response;
 import com.shivam.app_ka_kaam.sampleUtil.Constants;
 import com.shivam.app_ka_kaam.sampleUtil.Employee;
 
@@ -33,7 +37,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -163,14 +169,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void fetchData()
     {
-        DatabaseReference mDatabase;
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("GASMUKTA");
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Map<String,String> value = (Map<String,String>)dataSnapshot.getValue();
+                Log.d("Fetched", "Value is: " + value.toString());
+                Log.d("Fetched", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 
     public void csvPart()
     {
+        fetchData();
         Employee emp1 = new Employee(1, "FirstName1", "LastName1", 10000);
         Employee emp2 = new Employee(2, "FirstName2", "LastName2", 20000);
         Employee emp3 = new Employee(3, "FirstName3", "LastName3", 30000);
