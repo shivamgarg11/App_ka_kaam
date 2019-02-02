@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                        requestPermissions(new String[]{ACCESS_FINE_LOCATION},
+                                                        requestPermissions(new String[]{ACCESS_FINE_LOCATION,WRITE_EXTERNAL_STORAGE},
                                                                 PERMISSION_REQUEST_CODE);
                                                     }
                                                 }
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestPermission() {
 
-        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION,WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
 
     }
 
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void afterPerm()
     {
-        csvPart();
+        fetchData();
         ImageView adminbtn=findViewById(R.id.admin);
         ImageView userbtn=findViewById(R.id.user);
 
@@ -167,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    Map<String,String> value;
+
     public void fetchData()
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -182,10 +185,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("FetchedELectMukta", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()));
             }
 
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+
+
         });
 
         electMeena.addValueEventListener(new ValueEventListener() {
@@ -206,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                Map<String,String> value = (Map<String,String>)dataSnapshot.getValue();
+                value = (Map<String,String>)dataSnapshot.getValue();
                 Log.d("Fetched", "Value is: " + value.toString());
-                Log.d("Fetched", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()));
+                Log.d("Fetched", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()) + csvPart());
             }
 
             @Override
@@ -220,9 +226,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void csvPart()
+    public String csvPart()
     {
-        fetchData();
+
         Employee emp1 = new Employee(1, "FirstName1", "LastName1", 10000);
         Employee emp2 = new Employee(2, "FirstName2", "LastName2", 20000);
         Employee emp3 = new Employee(3, "FirstName3", "LastName3", 30000);
@@ -256,11 +262,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (IOException e) {
                 Log.e("", "Could not create file.", e);
-                return;
+                return "";
             }
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(a);
+            bw.write(value.toString());
             Log.d("MessageHere", a);
             bw.close();
 
@@ -290,5 +296,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity.java", "csvPart: Error");
                 }
         }
+        return "";
     }
 }
