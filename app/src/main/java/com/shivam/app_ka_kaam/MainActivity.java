@@ -18,10 +18,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
-
 import com.shivam.app_ka_kaam.User.user;
+import com.shivam.app_ka_kaam.response.Response;
 import com.shivam.app_ka_kaam.sampleUtil.Constants;
 import com.shivam.app_ka_kaam.sampleUtil.Employee;
 
@@ -32,10 +37,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import com.shivam.app_ka_kaam.R;
+import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                        requestPermissions(new String[]{ACCESS_FINE_LOCATION},
+                                                        requestPermissions(new String[]{ACCESS_FINE_LOCATION,WRITE_EXTERNAL_STORAGE},
                                                                 PERMISSION_REQUEST_CODE);
                                                     }
                                                 }
@@ -105,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestPermission() {
 
-        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION,WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
 
     }
 
@@ -120,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void afterPerm()
     {
+        fetchData();
         ImageView adminbtn=findViewById(R.id.admin);
         ImageView userbtn=findViewById(R.id.user);
 
@@ -160,8 +168,67 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void csvPart()
+    Map<String,String> value;
+
+    public void fetchData()
     {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference gasRef = database.getReference("GASMUKTA");
+        DatabaseReference electMeena = database.getReference("ELECTRICITYMEENA");
+        DatabaseReference electMukta = database.getReference("ELECTRICITYMUKTA");
+
+        electMukta.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String,String> value = (Map<String,String>)dataSnapshot.getValue();
+                Log.d("FetchedElectMukta", "Value is: " + value.toString());
+                Log.d("FetchedELectMukta", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()));
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+
+        });
+
+        electMeena.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String,String> value = (Map<String,String>)dataSnapshot.getValue();
+                Log.d("FetchedElectMeena", "Value is: " + value.toString());
+                Log.d("FetchedELectMeena", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        gasRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                value = (Map<String,String>)dataSnapshot.getValue();
+                Log.d("Fetched", "Value is: " + value.toString());
+                Log.d("Fetched", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()) + csvPart());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    public String csvPart()
+    {
+
         Employee emp1 = new Employee(1, "FirstName1", "LastName1", 10000);
         Employee emp2 = new Employee(2, "FirstName2", "LastName2", 20000);
         Employee emp3 = new Employee(3, "FirstName3", "LastName3", 30000);
@@ -182,7 +249,8 @@ public class MainActivity extends AppCompatActivity {
 
     //        String a = "1,2,4,5,6";
         Log.d("MessageFirst A", "onCreate: " + a);
-        String filePath = getApplicationContext().getFilesDir().getPath().toString() + "/Employee.csv";
+        String filePath = "/storage/emulated/0/Download/employee.csv";
+//        String
         try {
             String content = "Separe here integers by semi-colon";
             File file = new File(filePath);
@@ -194,11 +262,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (IOException e) {
                 Log.e("", "Could not create file.", e);
-                return;
+                return "";
             }
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(a);
+            bw.write(value.toString());
             Log.d("MessageHere", a);
             bw.close();
 
@@ -212,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         BufferedReader br = null;
         try {
             String sCurrentLine;
-            br = new BufferedReader(new FileReader(getApplicationContext().getFilesDir().getPath().toString() + "/Employee.csv"));
+            br = new BufferedReader(new FileReader("/storage/emulated/0/Download/employee.csv"));
             while ((sCurrentLine = br.readLine()) != null) {
                 b = b + sCurrentLine;
             }
@@ -228,5 +296,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity.java", "csvPart: Error");
                 }
         }
+        return "";
     }
 }

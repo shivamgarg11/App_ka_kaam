@@ -15,7 +15,6 @@ public class electricity_output extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_electricity_output);
 
-
         String pathway=getIntent().getStringExtra("path");
         TextView path=findViewById(R.id.path);
         path.setText("ADMIN/ELECTRICITY/"+pathway);

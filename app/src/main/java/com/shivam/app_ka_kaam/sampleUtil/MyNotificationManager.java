@@ -28,7 +28,7 @@ public class MyNotificationManager {
 
     public void displayNotification(String title,String body)
     {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(mCtx,Constants.CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mCtx, Constants.CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(body);
