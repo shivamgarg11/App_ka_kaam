@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
 import com.shivam.app_ka_kaam.User.user;
@@ -157,6 +159,14 @@ public class MainActivity extends AppCompatActivity {
             channel.setVibrationPattern(new long[] {100,200,300,400,500,400,300,200,400});
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    public void fetchData()
+    {
+        DatabaseReference mDatabase;
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
     }
 
     public void csvPart()
