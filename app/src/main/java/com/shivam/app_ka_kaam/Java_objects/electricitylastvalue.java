@@ -5,14 +5,14 @@ public class electricitylastvalue {
     int time;
     int month;
     int year;
-    int kwh;
-    int kvah;
+    double kwh;
+    double kvah;
 
     public electricitylastvalue(){
 
     }
 
-    public electricitylastvalue(int date, int time, int month, int year, int kwh, int kvah) {
+    public electricitylastvalue(int date, int time, int month, int year, double kwh, double kvah) {
         this.date = date;
         this.time = time;
         this.month = month;
@@ -54,19 +54,19 @@ public class electricitylastvalue {
         this.year = year;
     }
 
-    public int getKwh() {
+    public double getKwh() {
         return kwh;
     }
 
-    public void setKwh(int kwh) {
+    public void setKwh(double kwh) {
         this.kwh = kwh;
     }
 
-    public int getKvah() {
+    public double getKvah() {
         return kvah;
     }
 
-    public void setKvah(int kvah) {
+    public void setKvah(double kvah) {
         this.kvah = kvah;
     }
 }

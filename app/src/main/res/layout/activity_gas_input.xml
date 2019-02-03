@@ -19,6 +19,7 @@
         android:layout_height="50dp">
 
         <TextView
+            android:gravity="center"
             android:id="@+id/path"
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -71,21 +72,10 @@
             android:layout_height="wrap_content"
             android:hint="ENTER INPUT"
             android:gravity="center"
-            android:inputType="number"/>
+            android:inputType="numberDecimal"/>
 
     </android.support.design.widget.TextInputLayout>
 
-
-
-    <TextView
-        android:background="#bfffffff"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:textColor="#a70c0c"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=" RANGE ( A TO B ) "/>
 
     <LinearLayout
         android:background="#88ffffff"

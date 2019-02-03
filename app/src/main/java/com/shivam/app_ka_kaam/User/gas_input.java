@@ -29,6 +29,7 @@ import com.shivam.app_ka_kaam.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +56,7 @@ public class gas_input extends AppCompatActivity {
 
 
         TextView datetime=findViewById(R.id.datetime);
-       gettimedate(gas_input.this,datetime);
+        gettimedate(datetime);
 
 
         Button close =findViewById(R.id.close);
@@ -83,106 +84,109 @@ public class gas_input extends AppCompatActivity {
     }
 
 
-    public void onclickbutton(){
-        EditText gasinput=findViewById(R.id.gasinput);
-        final String data=gasinput.getText().toString();
-        getprevoiusdata();
-        loader.setVisibility(View.VISIBLE);
-        FancyToast.makeText(this, "WAIT WHILE WE ARE MAKING EVERYTHING READY ", FancyToast.LENGTH_SHORT,FancyToast.WARNING,false).show();
+    public void onclickbutton() {
+        EditText gasinput = findViewById(R.id.gasinput);
+        final String data = gasinput.getText().toString();
+
+        if (data.length() == 0) {
+            FancyToast.makeText(this, "PLEASE ENTER THE INPUT ", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+
+        } else {
+
+            getprevoiusdata();
+            loader.setVisibility(View.VISIBLE);
+            FancyToast.makeText(this, "WAIT WHILE WE ARE MAKING EVERYTHING READY ", FancyToast.LENGTH_SHORT, FancyToast.WARNING, false).show();
 
 
-                alertDialog = new AlertDialog.Builder(gas_input.this)
-                        .setIcon(R.drawable.logoo)
-                .setTitle("CONFIRMATION")
-                .setMessage("\nDATA : "+data+"\n\n")
-                .setNegativeButton("BACK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+            alertDialog = new AlertDialog.Builder(gas_input.this)
+                    .setIcon(R.drawable.logoo)
+                    .setTitle("CONFIRMATION")
+                    .setMessage("\nDATA : " + data + "\n\n")
+                    .setNegativeButton("BACK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                })
-                .setPositiveButton("SUBMIT", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setPositiveButton("SUBMIT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                        //WRITING TO FIREBASE
+                            //WRITING TO FIREBASE
 
-                        final int year=Integer.valueOf(timegas.substring(6,10));
-                        final int month=Integer.valueOf(timegas.substring(3,5));
-                        final int date=Integer.valueOf(timegas.substring(0,2));
+                            final int year = Integer.valueOf(timegas.substring(6, 10));
+                            final int month = Integer.valueOf(timegas.substring(3, 5));
+                            final int date = Integer.valueOf(timegas.substring(0, 2));
 
-                        //writing value
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        final DatabaseReference myRef = database.getReference("GAS"+pathway).child(year+"").child(month+"");
+                            //writing value
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            final DatabaseReference myRef = database.getReference("GAS" + pathway).child(year + "").child(month + "");
 
 
-                        //Writing lastvalue
-                         FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                        final DatabaseReference myRef1 = database1.getReference("GAS"+pathway).child("LASTVALUE");
+                            //Writing lastvalue
+                            FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                            final DatabaseReference myRef1 = database1.getReference("GAS" + pathway).child("LASTVALUE");
 
-                        myRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if(!dataSnapshot.hasChild(date+"")){
-                                    gas_object obj=insertvalues(Integer.valueOf(data));
-                                    myRef.child(date+"").setValue(obj);
-                                    FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING ", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
-                                    Toast toast= Toast.makeText(getApplicationContext(), "YOU HAVE BEEN LOGGED OUT", Toast.LENGTH_SHORT);
-                                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
-                                    toast.show();
-                                    startActivity(new Intent(gas_input.this, MainActivity.class));
-                                    finish();
+                            myRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (!dataSnapshot.hasChild(date + "")) {
+                                        gas_object obj = insertvalues(Double.valueOf(data));
+                                        myRef.child(date + "").setValue(obj);
+                                        FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING \n\n YOU HAVE BEEN LOGGED OUT", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
+                                        startActivity(new Intent(gas_input.this, MainActivity.class));
+                                        finish();
 
-                                }else{
+                                    } else {
 
-                                   AlertDialog.Builder override=new AlertDialog.Builder(gas_input.this)
-                                           .setIcon(R.drawable.logoo)
-                                           .setTitle("DO YOU WANT TO OVERWRITE THE DATA").setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                               @Override
-                                               public void onClick(DialogInterface dialog, int which) {
+                                        AlertDialog.Builder override = new AlertDialog.Builder(gas_input.this)
+                                                .setIcon(R.drawable.logoo)
+                                                .setTitle("DO YOU WANT TO OVERWRITE THE DATA").setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
 
-                                               }
-                                           })
-                                           .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                               @Override
-                                               public void onClick(DialogInterface dialog, int which) {
-                                                   gas_object obj=insertvalues(Integer.valueOf(data));
-                                                   myRef.child(date+"").setValue(obj);
-                                                   FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING ", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS,false).show();
-                                                   Toast toast= Toast.makeText(getApplicationContext(), "YOU HAVE BEEN LOGGED OUT", Toast.LENGTH_SHORT);
-                                                   toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
-                                                   toast.show();
-                                                   startActivity(new Intent(gas_input.this, MainActivity.class));
-                                                   finish();
+                                                    }
+                                                })
+                                                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        gas_object obj = insertvalues(Double.valueOf(data));
+                                                        myRef.child(date + "").setValue(obj);
+                                                        FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING \n\n YOU HAVE BEEN LOGGED OUT", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
+                                                        startActivity(new Intent(gas_input.this, MainActivity.class));
+                                                        finish();
 
-                                               }
-                                           });
-                                   override.create();
-                                   override.show();
 
+
+                                                    }
+                                                });
+                                        override.create();
+                                        override.show();
+
+                                    }
+
+                                    gaslastvalue obj = new gaslastvalue(date, Integer.valueOf(timegas.substring(11, 13)), month, year, Double.valueOf(data));
+                                    myRef1.setValue(obj);
                                 }
 
-                            gaslastvalue obj=new gaslastvalue(date,Integer.valueOf(timegas.substring(11,13)),month,year,Integer.valueOf(data));
-                            myRef1.setValue(obj);
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError error) {
-                                // Failed to read value
-                                Log.w("TAG", "Failed to read value.", error.toException());
-                            }
-                        });
-                    }
-                })
-                .create();
+                                @Override
+                                public void onCancelled(DatabaseError error) {
+                                    // Failed to read value
+                                    Log.w("TAG", "Failed to read value.", error.toException());
+                                }
+                            });
+                        }
+                    })
+                    .create();
+
+        }
 
     }
 
 
 
 
-
-
-    public  gas_object insertvalues(int input){
+    public  gas_object insertvalues(double input){
         gas_object obj = new gas_object();
 
            Log.e("TAG", "insertvalues: " + lastvalue[0].getValue());
@@ -268,48 +272,14 @@ public class gas_input extends AppCompatActivity {
 
     }
 
-    public void gettimedate(Context context, final TextView datetime){
+    public void gettimedate(final TextView datetime){
 
-        android.location.LocationManager locationManager = (android.location.LocationManager)
-                context.getSystemService(android.content.Context.LOCATION_SERVICE);
-
-        android.location.LocationListener locationListener = new android.location.LocationListener() {
-
-            public void onLocationChanged(android.location.Location location) {
-
-                timegas = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(location.getTime());
-
-                if( location.getProvider().equals(android.location.LocationManager.GPS_PROVIDER)){
-                    android.util.Log.d("Location", "Time GPS: " + timegas); // This is what we want!
-                    datetime.setText(timegas);
-                    loader.setVisibility(View.GONE);
-                }
-                else {
-                    android.util.Log.d("Location", "Time Device (" + location.getProvider() + "): " + timegas);
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        timegas = dateformat.format(c.getTime());
                     datetime.setText(timegas);
                     loader.setVisibility(View.GONE);}
 
-
-            }
-
-            public void onStatusChanged(String provider, int status, android.os.Bundle extras) {
-            }
-            public void onProviderEnabled(String provider) {
-            }
-            public void onProviderDisabled(String provider) {
-            }
-        };
-
-        if (android.support.v4.content.ContextCompat.checkSelfPermission(context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-            android.util.Log.d("Location", "Incorrect 'uses-permission', requires 'ACCESS_FINE_LOCATION'");
-        }
-
-        locationManager.requestLocationUpdates(android.location.LocationManager.NETWORK_PROVIDER, 100, 0, locationListener);
-        locationManager.requestLocationUpdates(android.location.LocationManager.GPS_PROVIDER, 100, 0, locationListener);
-
-
-    }
 
     @Override
     public void onBackPressed() {

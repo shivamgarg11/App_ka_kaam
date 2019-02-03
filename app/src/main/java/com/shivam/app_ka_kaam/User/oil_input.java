@@ -17,6 +17,9 @@ import android.widget.TextView;
 
 import com.shivam.app_ka_kaam.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class oil_input extends AppCompatActivity {
 
     static String  timeoil="";
@@ -89,43 +92,10 @@ public class oil_input extends AppCompatActivity {
 
     public static void gettimedate(Context context, final TextView datetime){
 
-        android.location.LocationManager locationManager = (android.location.LocationManager)
-                context.getSystemService(android.content.Context.LOCATION_SERVICE);
-
-        android.location.LocationListener locationListener = new android.location.LocationListener() {
-
-            public void onLocationChanged(android.location.Location location) {
-
-                timeoil = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(location.getTime());
-
-                if( location.getProvider().equals(android.location.LocationManager.GPS_PROVIDER)){
-                    android.util.Log.d("Location", "Time GPS: " + timeoil); // This is what we want!
-                    datetime.setText(timeoil); }
-                else {
-                    android.util.Log.d("Location", "Time Device (" + location.getProvider() + "): " + timeoil);
-                    datetime.setText(timeoil);}
-
-
-            }
-
-            public void onStatusChanged(String provider, int status, android.os.Bundle extras) {
-            }
-            public void onProviderEnabled(String provider) {
-            }
-            public void onProviderDisabled(String provider) {
-            }
-        };
-
-        if (android.support.v4.content.ContextCompat.checkSelfPermission(context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-            android.util.Log.d("Location", "Incorrect 'uses-permission', requires 'ACCESS_FINE_LOCATION'");
-        }
-
-        locationManager.requestLocationUpdates(android.location.LocationManager.NETWORK_PROVIDER, 100, 0, locationListener);
-        locationManager.requestLocationUpdates(android.location.LocationManager.GPS_PROVIDER, 100, 0, locationListener);
-
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        timeoil = dateformat.format(c.getTime());
         datetime.setText(timeoil);
-
 
     }
 

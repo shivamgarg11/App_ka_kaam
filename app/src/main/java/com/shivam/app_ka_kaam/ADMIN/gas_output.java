@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shivam.app_ka_kaam.MainActivity;
 import com.shivam.app_ka_kaam.R;
 
 public class gas_output extends AppCompatActivity {
@@ -30,6 +31,16 @@ public class gas_output extends AppCompatActivity {
         //////////////////////////////////
 
         //////////////////////////////////
+
+        Button goback=findViewById(R.id.goback);
+        goback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(gas_output.this, admin.class));
+                finish();
+            }
+        });
+
 
 
         final String[] date = {""};

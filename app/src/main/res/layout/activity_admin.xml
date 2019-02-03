@@ -15,6 +15,7 @@
         android:layout_height="100dp">
 
         <TextView
+            android:gravity="center"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -116,6 +117,17 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/goback"
+        android:padding="5dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:background="#89eae3e3"
+        android:text="GO BACK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 

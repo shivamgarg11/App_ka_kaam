@@ -5,13 +5,13 @@ public class gaslastvalue {
     int time;
     int month;
     int year;
-    int value;
+    double value;
 
     public gaslastvalue(){
 
     }
 
-    public gaslastvalue(int date, int time, int month, int year, int value) {
+    public gaslastvalue(int date, int time, int month, int year, double value) {
         this.date = date;
         this.time = time;
         this.month = month;
@@ -35,7 +35,7 @@ public class gaslastvalue {
         return year;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 
@@ -55,7 +55,7 @@ public class gaslastvalue {
         this.year = year;
     }
 
-    public void setValue(int value) {
+    public void setValue(double value) {
         this.value = value;
     }
 }

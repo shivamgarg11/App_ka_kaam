@@ -1,9 +1,9 @@
 package com.shivam.app_ka_kaam.Java_objects;
 
 public class gas_object {
-    int input;
+    double input;
     int time;
-    int difference;
+    double difference;
     double scm;
     double mmbto;
     double ride;
@@ -13,7 +13,7 @@ public class gas_object {
 
     }
 
-    public gas_object(int input, int time, int difference, double scm, double mmbto, double ride, double bill) {
+    public gas_object(double input, int time, int difference, double scm, double mmbto, double ride, double bill) {
         this.input = input;
         this.time = time;
         this.difference = difference;
@@ -24,7 +24,7 @@ public class gas_object {
     }
 
 
-    public int getInput() {
+    public double getInput() {
         return input;
     }
 
@@ -32,7 +32,7 @@ public class gas_object {
         return time;
     }
 
-    public int getDifference() {
+    public double getDifference() {
         return difference;
     }
 
@@ -52,7 +52,7 @@ public class gas_object {
         return bill;
     }
 
-    public void setInput(int input) {
+    public void setInput(double input) {
         this.input = input;
     }
 
@@ -60,7 +60,7 @@ public class gas_object {
         this.time = time;
     }
 
-    public void setDifference(int difference) {
+    public void setDifference(double difference) {
         this.difference = difference;
     }
 

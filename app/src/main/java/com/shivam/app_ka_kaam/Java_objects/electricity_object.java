@@ -1,10 +1,10 @@
 package com.shivam.app_ka_kaam.Java_objects;
 
 public class electricity_object {
-int kwh;
-int kvah;
-int mpf;
-int ppf;
+    double kwh;
+    double kvah;
+    double mpf;
+    double ppf;
 double cal_pf;
 double amount1;
 double amount2;
@@ -23,35 +23,35 @@ double amount2;
         this.amount2 = amount2;
     }
 
-    public int getKwh() {
+    public double getKwh() {
         return kwh;
     }
 
-    public void setKwh(int kwh) {
+    public void setKwh(double kwh) {
         this.kwh = kwh;
     }
 
-    public int getKvah() {
+    public double getKvah() {
         return kvah;
     }
 
-    public void setKvah(int kvah) {
+    public void setKvah(double kvah) {
         this.kvah = kvah;
     }
 
-    public int getMpf() {
+    public double getMpf() {
         return mpf;
     }
 
-    public void setMpf(int mpf) {
+    public void setMpf(double mpf) {
         this.mpf = mpf;
     }
 
-    public int getPpf() {
+    public double getPpf() {
         return ppf;
     }
 
-    public void setPpf(int ppf) {
+    public void setPpf(double ppf) {
         this.ppf = ppf;
     }
 

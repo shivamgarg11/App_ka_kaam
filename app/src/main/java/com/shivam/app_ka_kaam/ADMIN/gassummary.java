@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -21,6 +23,15 @@ public class gassummary extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gassummary);
+
+        Button goback=findViewById(R.id.goback);
+        goback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(gassummary.this, admin.class));
+                finish();
+            }
+        });
 
         String datestr= getIntent().getStringExtra("DATE");
 
@@ -47,13 +58,20 @@ public class gassummary extends AppCompatActivity {
 
                 if(dataSnapshot.exists()) {
                gas_object obj=dataSnapshot.getValue(gas_object.class);
-                   input.setText(obj.getInput() + "");
-                   difference.setText(obj.getDifference() + "");
-                   scm.setText(obj.getScm() + "");
-                   mmbto.setText(obj.getMmbto() + "");
-                   ride.setText(obj.getRide() + "");
-                   bill.setText(obj.getBill() + "");
-               }
+                   input.setText((float)obj.getInput() + "");
+                   difference.setText((float)obj.getDifference() + "");
+                   scm.setText((float)obj.getScm() + "");
+                   mmbto.setText((float)obj.getMmbto() + "");
+                   ride.setText((float)obj.getRide() + "");
+                   bill.setText((float)obj.getBill() + "");
+               }else{
+                    input.setText("NULL");
+                    difference.setText("NULL");
+                    scm.setText("NULL");
+                    mmbto.setText("NULL");
+                    ride.setText("NULL");
+                    bill.setText("NULL");
+                }
             }
             @Override
             public void onCancelled(DatabaseError error) {
