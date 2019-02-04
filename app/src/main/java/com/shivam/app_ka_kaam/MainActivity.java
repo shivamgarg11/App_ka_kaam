@@ -26,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
 import com.shivam.app_ka_kaam.User.user;
-import com.shivam.app_ka_kaam.response.Response;
 import com.shivam.app_ka_kaam.sampleUtil.Constants;
 import com.shivam.app_ka_kaam.sampleUtil.Employee;
 
@@ -173,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
     public void fetchData()
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference gasRef = database.getReference("GASMUKTA");
+        DatabaseReference gasRef = database.getReference();
         DatabaseReference electMeena = database.getReference("ELECTRICITYMEENA");
         DatabaseReference electMukta = database.getReference("ELECTRICITYMUKTA");
 
@@ -213,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 value = (Map<String,String>)dataSnapshot.getValue();
-                Log.d("Fetched", "Value is: " + value.toString());
+                Log.d("FetchedGas", "Value is: " + value.toString());
                 Log.d("Fetched", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()) + csvPart());
             }
 
