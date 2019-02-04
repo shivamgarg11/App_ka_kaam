@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
     public void fetchData()
     {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference gasRef = database.getReference("GASMUKTA");
+        DatabaseReference gasRef = database.getReference();
         DatabaseReference electMeena = database.getReference("ELECTRICITYMEENA");
         DatabaseReference electMukta = database.getReference("ELECTRICITYMUKTA");
 
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 value = (Map<String,String>)dataSnapshot.getValue();
-                Log.d("Fetched", "Value is: " + value.toString());
+                Log.d("FetchedGas", "Value is: " + value.toString());
                 Log.d("Fetched", "onDataChange: "+ Arrays.toString(value.entrySet().toArray()) + csvPart());
             }
 
