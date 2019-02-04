@@ -5,13 +5,17 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +27,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shivam.app_ka_kaam.R;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class gas_output extends AppCompatActivity {
 
-    final String[] gasDownload = new String[]{"Yearly","Monthly","Week"};
+    final String[] gasDownload = new String[]{"Yearly","Monthly","Date Range"};
     int selected=gasDownload.length-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,13 +149,16 @@ public class gas_output extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+
                 final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString()));
                 myRef1.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists())
                         {
-                            Log.d("201999", "20199" + dataSnapshot.toString());
+                            for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+                                Log.d("20199", "onDataChange: "+messageSnapshot.getValue());
+                            }
                         }
 
                         else{
@@ -208,36 +223,76 @@ public class gas_output extends AppCompatActivity {
         dialog.show();
 
     }
-
+    String dateStart = "";
+    String dateEnd = "";
     public void selWeek(){
         Toast.makeText(this, "" + gasDownload[selected] , Toast.LENGTH_SHORT).show();
-        AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
-        View view = getLayoutInflater().inflate(R.layout.spinner_dialog,null);
-        builder.setTitle("Select Week to View weekly Report");
-        final Spinner spinner = view.findViewById(R.id.spinner);
-        ArrayList<String> week = new ArrayList<>();
-        week.add("1st Week");
-        week.add("2nd Week");
-        week.add("3rd Week");
-        week.add("4th Week");
-        week.add("5th Week (if applicable)");
+        final AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
+        View view = getLayoutInflater().inflate(R.layout.date_range,null);
+        ImageView date1Im = view.findViewById(R.id.date_1_im);
+        ImageView date2Im = view.findViewById(R.id.date_2_im);
+
+        final TextView tvDateStart = view.findViewById(R.id.date_1_tv);
+        final TextView tvDateEnd = view.findViewById(R.id.date_2_tv);
+        date1Im.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(gas_output.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        if(monthOfYear<9)
+                            dateStart =""+year+"/0"+(monthOfYear+1)+"/"+dayOfMonth;
+                        else
+                            dateStart =+year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
+                        tvDateStart.setText(String.valueOf(dayOfMonth) +"/"+ String.valueOf(monthOfYear) +"/"+ String.valueOf(year));
+
+                    }
+                }, 2019, 01, 01).show();
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(gas_output.this,android.R.layout.simple_spinner_item,week);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        spinner.setAdapter(adapter);
+            }
+        });
+
+        date2Im.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(gas_output.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        if(monthOfYear<9)
+                            dateEnd =""+year+"/0"+(monthOfYear+1)+"/"+dayOfMonth;
+                        else
+                            dateEnd =""+year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
+
+                        tvDateEnd.setText(String.valueOf(dayOfMonth) +"/"+ String.valueOf(monthOfYear) +"/"+ String.valueOf(year));
+
+                    }
+                }, 2019, 01, 01).show();
+
+            }
+        });
+
+
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(gas_output.this, spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    Log.d("DateRange", "onClick: " + sdf.parse(dateStart).before(sdf.parse(dateEnd)));
+                    Log.d("DateRan", "onClick: " +dateStart + dateEnd);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
+
+
+
+
         builder.setView(view);
         AlertDialog dialog = builder.create();
         dialog.show();
-        Log.d("Years", "selYear: " + week.get(0) + week.get(4));
-
-
     }
 
 
