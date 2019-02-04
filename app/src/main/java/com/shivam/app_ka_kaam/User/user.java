@@ -52,7 +52,7 @@ public class user extends AppCompatActivity {
                 AlertDialog dialog=new AlertDialog.Builder(user.this)
                         .setIcon(R.drawable.logoo)
                         .setTitle("              OIL")
-                        .setSingleChoiceItems(oilarray, 1, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(oilarray, oilarray.length-1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 selected = which;
@@ -88,7 +88,7 @@ public class user extends AppCompatActivity {
                 AlertDialog dialog=new AlertDialog.Builder(user.this)
                         .setIcon(R.drawable.logoo)
                         .setTitle("              GAS")
-                        .setSingleChoiceItems(gasarray, 1, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(gasarray, gasarray.length-1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 selected = which;
@@ -121,7 +121,7 @@ public class user extends AppCompatActivity {
                 AlertDialog dialog=new AlertDialog.Builder(user.this)
                         .setIcon(R.drawable.logoo)
                         .setTitle("          ELECTRICITY")
-                        .setSingleChoiceItems(electricityarray, 1, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(electricityarray, electricityarray.length-1, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 selected = which;

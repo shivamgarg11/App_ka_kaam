@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -82,25 +83,20 @@ public class electricity_input extends AppCompatActivity {
 
     public  void onclickbutton() {
 
-        getprevoiusdata();
-        loader.setVisibility(View.VISIBLE);
-        FancyToast.makeText(this, "WAIT WHILE WE ARE MAKING EVERYTHING READY ", FancyToast.LENGTH_SHORT, FancyToast.WARNING, false).show();
-
-
         EditText electricityinput1 = findViewById(R.id.electricityinput1);
-        String datastr1=electricityinput1.getText().toString();
+        String datastr1=electricityinput1.getText().toString()+"";
 
 
         EditText electricityinput2 = findViewById(R.id.electricityinput2);
-        String datastr2=electricityinput2.getText().toString();
+        String datastr2=electricityinput2.getText().toString()+"";
 
 
         EditText electricityinput3 = findViewById(R.id.electricityinput3);
-        String datastr3=electricityinput3.getText().toString();
+        String datastr3=electricityinput3.getText().toString()+"";
 
 
         EditText electricityinput4 = findViewById(R.id.electricityinput4);
-        String datastr4=electricityinput4.getText().toString();
+        String datastr4=electricityinput4.getText().toString()+"";
 
 
 
@@ -108,7 +104,8 @@ public class electricity_input extends AppCompatActivity {
             FancyToast.makeText(this, "PLEASE ENTER THE INPUT ", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
 
         } else {
-
+            FancyToast.makeText(this, "WAIT WHILE WE ARE MAKING EVERYTHING READY ", FancyToast.LENGTH_SHORT, FancyToast.WARNING, false).show();
+            loader.setVisibility(View.VISIBLE);
             final double data1 = Double.valueOf(datastr1);
             final double data2 = Double.valueOf(datastr2);
             final double data3 = Double.valueOf(datastr3);
@@ -126,15 +123,10 @@ public class electricity_input extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            //WRITING TO FIREBASE
-
-                            final int year = Integer.valueOf(timeelectricity.substring(6, 10));
-                            final int month = Integer.valueOf(timeelectricity.substring(3, 5));
-                            final int date = Integer.valueOf(timeelectricity.substring(0, 2));
 
                             //writing value
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            final DatabaseReference myRef = database.getReference("ELECTRICITY" + pathway).child(year + "").child(month + "");
+                            final DatabaseReference myRef = database.getReference("ELECTRICITY" + pathway).child("ENTERIES").child(timeelectricity.substring(0,10));
 
 
                             //Writing lastvalue
@@ -144,42 +136,20 @@ public class electricity_input extends AppCompatActivity {
                             myRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (!dataSnapshot.hasChild(date + "")) {
+                                    if (!dataSnapshot.exists()) {
                                         electricity_object obj = insertvalues(data1, data2, data3, data4);
-                                        myRef.child(date + "").setValue(obj);
+                                        myRef.setValue(obj);
                                         FancyToast.makeText(electricity_input.this, "THANK YOU FOR UPDATING \n\n YOU HAVE BEEN LOGGED OUT", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
-                                        startActivity(new Intent(electricity_input.this, MainActivity.class));
-                                        finish();
+                                        electricitylastvalue obj1 = new electricitylastvalue(timeelectricity, data1, data2);
+                                        myRef1.setValue(obj1);
 
-                                    } else {
-
-                                        AlertDialog.Builder override = new AlertDialog.Builder(electricity_input.this)
-                                                .setIcon(R.drawable.logoo)
-                                                .setTitle("DO YOU WANT TO OVERWRITE THE DATA").setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-
-                                                    }
-                                                })
-                                                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        electricity_object obj = insertvalues(data1, data2, data3, data4);
-                                                        myRef.child(date + "").setValue(obj);
-                                                        FancyToast.makeText(electricity_input.this, "THANK YOU FOR UPDATING \n\n YOU HAVE BEEN LOGGED OUT", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
-
-                                                        startActivity(new Intent(electricity_input.this, MainActivity.class));
-                                                        finish();
-
-                                                    }
-                                                });
-                                        override.create();
-                                        override.show();
+                                    } else{
+                                        FancyToast.makeText(electricity_input.this,"YOU HAVE ALREADY ENTERED THE DATA", Toast.LENGTH_SHORT,FancyToast.INFO,false).show();
 
                                     }
 
-                                    electricitylastvalue obj = new electricitylastvalue(date, Integer.valueOf(timeelectricity.substring(11, 13)), month, year, data1, data2);
-                                    myRef1.setValue(obj);
+                                    startActivity(new Intent(electricity_input.this, MainActivity.class));
+                                    finish();
                                 }
 
                                 @Override
@@ -191,6 +161,8 @@ public class electricity_input extends AppCompatActivity {
                         }
                     })
                     .create();
+
+            getprevoiusdata();
 
         }
     }
@@ -204,29 +176,21 @@ public class electricity_input extends AppCompatActivity {
         obj.setMpf(input3);
         obj.setPpf(input4);
         obj.setCal_pf((input1-lastvalue[0].getKwh())/(input2-lastvalue[0].getKvah()));
+        obj.setDiffkwh(input1-lastvalue[0].getKwh());
+        obj.setDiffkvah(input2-lastvalue[0].getKvah());
 
-
-        final int year=Integer.valueOf(timeelectricity.substring(6,10));
-        final int month=Integer.valueOf(timeelectricity.substring(3,5));
-        final int date=Integer.valueOf(timeelectricity.substring(0,2));
-
-        SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
-        String inputString1 = lastvalue[0].getDate()+" "+lastvalue[0].getMonth()+" "+lastvalue[0].getYear();
-        String inputString2 = date+" "+month+" "+year;
+        SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy HH:mm");
+        String inputString1 = lastvalue[0].getDate();
+        String inputString2 = timeelectricity;
 
         try {
             Date date1 = myFormat.parse(inputString1);
             Date date2 = myFormat.parse(inputString2);
-            long diff = (TimeUnit.DAYS.convert(date2.getTime() - date1.getTime(), TimeUnit.HOURS)/24)*24;
-
-            if(diff==0){
-                diff=Integer.valueOf(timeelectricity.substring(11,13))-lastvalue[0].getTime();
-            }
-            if(diff==0){
+            long diff = TimeUnit.MILLISECONDS.toHours(date2.getTime() - date1.getTime());
+            if(diff==0)
                 diff=1;
-            }
 
-            obj.setAmount1((obj.getCal_pf()*constant[0].getC1()*constant[0].getC3()*15*24)/diff);
+            obj.setAmount1(obj.getCal_pf()*constant[0].getC1()*constant[0].getC3()*15);
             obj.setAmount2((obj.getCal_pf()*constant[0].getC2()*constant[0].getC3()*15*24)/diff);
 
         } catch (ParseException e) {
@@ -244,6 +208,12 @@ public class electricity_input extends AppCompatActivity {
 
         final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
         final DatabaseReference myRef1 = database1.getReference("ELECTRICITY"+pathway).child("CONSTANTS");
+
+
+        //
+        myRef.setValue(new electricitylastvalue(timeelectricity,12,12));
+        //
+
 
         myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -283,7 +253,7 @@ public class electricity_input extends AppCompatActivity {
     public  void gettimedate(final TextView datetime){
 
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd MM yyyy HH:mm");
         timeelectricity = dateformat.format(c.getTime());
                     datetime.setText(timeelectricity);
                     loader.setVisibility(View.GONE);}

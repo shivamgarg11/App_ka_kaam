@@ -3,19 +3,23 @@ package com.shivam.app_ka_kaam.Java_objects;
 public class electricity_object {
     double kwh;
     double kvah;
+    double diffkwh;
+    double diffkvah;
     double mpf;
     double ppf;
-double cal_pf;
-double amount1;
-double amount2;
+    double cal_pf;
+    double amount1;
+    double amount2;
 
     public electricity_object(){
 
     }
 
-    public electricity_object(int kwh, int kvah, int mpf, int ppf, double cal_pf, double amount1, double amount2) {
+    public electricity_object(double kwh, double kvah, double diffkwh, double diffkvah, double mpf, double ppf, double cal_pf, double amount1, double amount2) {
         this.kwh = kwh;
         this.kvah = kvah;
+        this.diffkwh = diffkwh;
+        this.diffkvah = diffkvah;
         this.mpf = mpf;
         this.ppf = ppf;
         this.cal_pf = cal_pf;
@@ -37,6 +41,22 @@ double amount2;
 
     public void setKvah(double kvah) {
         this.kvah = kvah;
+    }
+
+    public double getDiffkwh() {
+        return diffkwh;
+    }
+
+    public void setDiffkwh(double diffkwh) {
+        this.diffkwh = diffkwh;
+    }
+
+    public double getDiffkvah() {
+        return diffkvah;
+    }
+
+    public void setDiffkvah(double diffkvah) {
+        this.diffkvah = diffkvah;
     }
 
     public double getMpf() {

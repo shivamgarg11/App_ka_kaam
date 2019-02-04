@@ -1,13 +1,11 @@
 package com.shivam.app_ka_kaam.User;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -85,7 +83,7 @@ public class gas_input extends AppCompatActivity {
 
 
     public void onclickbutton() {
-        EditText gasinput = findViewById(R.id.gasinput);
+        final EditText gasinput = findViewById(R.id.gasinput);
         final String data = gasinput.getText().toString();
 
         if (data.length() == 0) {
@@ -93,7 +91,6 @@ public class gas_input extends AppCompatActivity {
 
         } else {
 
-            getprevoiusdata();
             loader.setVisibility(View.VISIBLE);
             FancyToast.makeText(this, "WAIT WHILE WE ARE MAKING EVERYTHING READY ", FancyToast.LENGTH_SHORT, FancyToast.WARNING, false).show();
 
@@ -114,59 +111,32 @@ public class gas_input extends AppCompatActivity {
 
                             //WRITING TO FIREBASE
 
-                            final int year = Integer.valueOf(timegas.substring(6, 10));
-                            final int month = Integer.valueOf(timegas.substring(3, 5));
-                            final int date = Integer.valueOf(timegas.substring(0, 2));
-
                             //writing value
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            final DatabaseReference myRef = database.getReference("GAS" + pathway).child(year + "").child(month + "");
+                            final DatabaseReference myRef = database.getReference("GAS" + pathway).child("ENTERIES").child(timegas.substring(0,10));
 
 
                             //Writing lastvalue
                             FirebaseDatabase database1 = FirebaseDatabase.getInstance();
                             final DatabaseReference myRef1 = database1.getReference("GAS" + pathway).child("LASTVALUE");
 
+
                             myRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (!dataSnapshot.hasChild(date + "")) {
+                                    if (!dataSnapshot.exists()) {
                                         gas_object obj = insertvalues(Double.valueOf(data));
-                                        myRef.child(date + "").setValue(obj);
+                                        myRef.setValue(obj);
                                         FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING \n\n YOU HAVE BEEN LOGGED OUT", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
-                                        startActivity(new Intent(gas_input.this, MainActivity.class));
-                                        finish();
+                                        gaslastvalue obj1 = new gaslastvalue(timegas, Double.valueOf(data));
+                                        myRef1.setValue(obj1);
 
-                                    } else {
-
-                                        AlertDialog.Builder override = new AlertDialog.Builder(gas_input.this)
-                                                .setIcon(R.drawable.logoo)
-                                                .setTitle("DO YOU WANT TO OVERWRITE THE DATA").setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-
-                                                    }
-                                                })
-                                                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        gas_object obj = insertvalues(Double.valueOf(data));
-                                                        myRef.child(date + "").setValue(obj);
-                                                        FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING \n\n YOU HAVE BEEN LOGGED OUT", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
-                                                        startActivity(new Intent(gas_input.this, MainActivity.class));
-                                                        finish();
-
-
-
-                                                    }
-                                                });
-                                        override.create();
-                                        override.show();
-
+                                    }else{
+                                      FancyToast.makeText(gas_input.this,"YOU HAVE ALREADY ENTERED THE DATA", Toast.LENGTH_SHORT,FancyToast.INFO,false).show();
                                     }
 
-                                    gaslastvalue obj = new gaslastvalue(date, Integer.valueOf(timegas.substring(11, 13)), month, year, Double.valueOf(data));
-                                    myRef1.setValue(obj);
+                                    startActivity(new Intent(gas_input.this, MainActivity.class));
+                                    finish();
                                 }
 
                                 @Override
@@ -179,6 +149,9 @@ public class gas_input extends AppCompatActivity {
                     })
                     .create();
 
+            getprevoiusdata();
+
+
         }
 
     }
@@ -187,48 +160,35 @@ public class gas_input extends AppCompatActivity {
 
 
     public  gas_object insertvalues(double input){
-        gas_object obj = new gas_object();
 
-           Log.e("TAG", "insertvalues: " + lastvalue[0].getValue());
+           gas_object obj = new gas_object();
            obj.setInput(input);
-           obj.setTime(Integer.valueOf(timegas.substring(11, 13)));
            obj.setDifference(input-lastvalue[0].getValue());
            obj.setScm(obj.getDifference()*constant[0].getC1());
-           obj.setMmbto(obj.getScm()*constant[0].getC2()*constant[0].getC3());
+           obj.setMmbto((obj.getScm()*constant[0].getC2()*constant[0].getC3())/constant[0].getC5());
            obj.setRide(obj.getMmbto()*constant[0].getC4());
 
-        final int year=Integer.valueOf(timegas.substring(6,10));
-        final int month=Integer.valueOf(timegas.substring(3,5));
-        final int date=Integer.valueOf(timegas.substring(0,2));
 
-        SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
-        String inputString1 = lastvalue[0].getDate()+" "+lastvalue[0].getMonth()+" "+lastvalue[0].getYear();
-        String inputString2 = date+" "+month+" "+year;
+        SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy HH:mm");
+        String inputString1 = lastvalue[0].getDate();
+        String inputString2 = timegas;
 
         try {
             Date date1 = myFormat.parse(inputString1);
             Date date2 = myFormat.parse(inputString2);
-            long diff = (TimeUnit.DAYS.convert(date2.getTime() - date1.getTime(), TimeUnit.HOURS)/24)*24;
-
-            if(diff==0){
-                diff=Integer.valueOf(timegas.substring(11,13))-lastvalue[0].getTime();
-            }
-            if(diff==0){
-                diff=1;
-            }
+            long diff = TimeUnit.MILLISECONDS.toHours(date2.getTime() - date1.getTime());
+           if(diff==0)
+            diff=1;
             obj.setBill((obj.getRide()*15*24)/diff);
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-
-
-
-
         return  obj;
 
     }
+
 
     public void getprevoiusdata(){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -272,10 +232,11 @@ public class gas_input extends AppCompatActivity {
 
     }
 
+
     public void gettimedate(final TextView datetime){
 
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd MM yyyy HH:mm");
         timegas = dateformat.format(c.getTime());
                     datetime.setText(timegas);
                     loader.setVisibility(View.GONE);}
