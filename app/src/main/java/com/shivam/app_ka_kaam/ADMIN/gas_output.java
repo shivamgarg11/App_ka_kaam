@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.shivam.app_ka_kaam.R;
 
 import java.util.ArrayList;
@@ -74,9 +80,9 @@ public class gas_output extends AppCompatActivity {
                                     dialog.dismiss();
                                     selYear();
                                 }
-                                else if(selected == 1){selMonth();}
+                                else if(selected == 1){dialog.dismiss();selMonth();}
 
-                                else{selWeek();}
+                                else{dialog.dismiss();selWeek();}
                             }
                         })
                         .setNegativeButton("Back", new DialogInterface.OnClickListener() {
@@ -117,7 +123,6 @@ public class gas_output extends AppCompatActivity {
     public ArrayList<String> arr = new ArrayList<>();
 
     public void selYear(){
-        Toast.makeText(this, "" + gasDownload[selected] , Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
         View view = getLayoutInflater().inflate(R.layout.spinner_dialog,null);
         builder.setTitle("Select Year to View Report");
@@ -131,7 +136,26 @@ public class gas_output extends AppCompatActivity {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(gas_output.this, spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString()));
+                myRef1.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                        {
+                            Log.d("201999", "20199" + dataSnapshot.toString());
+                        }
+
+                        else{
+                            Toast.makeText(gas_output.this,"Entry Doesn't Exist",Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
         builder.setView(view);
@@ -187,6 +211,32 @@ public class gas_output extends AppCompatActivity {
 
     public void selWeek(){
         Toast.makeText(this, "" + gasDownload[selected] , Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
+        View view = getLayoutInflater().inflate(R.layout.spinner_dialog,null);
+        builder.setTitle("Select Week to View weekly Report");
+        final Spinner spinner = view.findViewById(R.id.spinner);
+        ArrayList<String> week = new ArrayList<>();
+        week.add("1st Week");
+        week.add("2nd Week");
+        week.add("3rd Week");
+        week.add("4th Week");
+        week.add("5th Week (if applicable)");
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(gas_output.this,android.R.layout.simple_spinner_item,week);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner.setAdapter(adapter);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(gas_output.this, spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        Log.d("Years", "selYear: " + week.get(0) + week.get(4));
+
 
     }
 
