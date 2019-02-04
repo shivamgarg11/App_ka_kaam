@@ -112,21 +112,25 @@ public class gas_input extends AppCompatActivity {
                             //WRITING TO FIREBASE
 
                             //writing value
+                            final int year = Integer.valueOf(timegas.substring(6, 10));
+                            final int month = Integer.valueOf(timegas.substring(3, 5));
+                            final int date = Integer.valueOf(timegas.substring(0, 2));
+
+                            //writing value
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            final DatabaseReference myRef = database.getReference("GAS" + pathway).child("ENTERIES").child(timegas.substring(0,10));
+                            final DatabaseReference myRef = database.getReference("GAS" + pathway).child(year + "").child(month + "");
 
 
                             //Writing lastvalue
                             FirebaseDatabase database1 = FirebaseDatabase.getInstance();
                             final DatabaseReference myRef1 = database1.getReference("GAS" + pathway).child("LASTVALUE");
 
-
                             myRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (!dataSnapshot.exists()) {
+                                    if (!dataSnapshot.hasChild(date + "")) {
                                         gas_object obj = insertvalues(Double.valueOf(data));
-                                        myRef.setValue(obj);
+                                        myRef.child(date + "").setValue(obj);
                                         FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING \n\n YOU HAVE BEEN LOGGED OUT", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
                                         gaslastvalue obj1 = new gaslastvalue(timegas, Double.valueOf(data));
                                         myRef1.setValue(obj1);

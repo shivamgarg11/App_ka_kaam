@@ -124,9 +124,13 @@ public class electricity_input extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
 
 
+                            final int year = Integer.valueOf(timeelectricity.substring(6, 10));
+                            final int month = Integer.valueOf(timeelectricity.substring(3, 5));
+                            final int date = Integer.valueOf(timeelectricity.substring(0, 2));
+
                             //writing value
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            final DatabaseReference myRef = database.getReference("ELECTRICITY" + pathway).child("ENTERIES").child(timeelectricity.substring(0,10));
+                            final DatabaseReference myRef = database.getReference("ELECTRICITY" + pathway).child(year + "").child(month + "");
 
 
                             //Writing lastvalue
@@ -136,9 +140,9 @@ public class electricity_input extends AppCompatActivity {
                             myRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (!dataSnapshot.exists()) {
+                                    if (!dataSnapshot.hasChild(date + "")) {
                                         electricity_object obj = insertvalues(data1, data2, data3, data4);
-                                        myRef.setValue(obj);
+                                        myRef.child(date + "").setValue(obj);
                                         FancyToast.makeText(electricity_input.this, "THANK YOU FOR UPDATING \n\n YOU HAVE BEEN LOGGED OUT", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
                                         electricitylastvalue obj1 = new electricitylastvalue(timeelectricity, data1, data2);
                                         myRef1.setValue(obj1);

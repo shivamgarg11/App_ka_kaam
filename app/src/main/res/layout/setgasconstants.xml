@@ -87,6 +87,38 @@
     </LinearLayout>
 
 
+    <TextView
+        android:background="#000"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginLeft="90dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"/>
+
+        <EditText
+            android:gravity="center"
+            android:inputType="numberDecimal"
+            android:hint="  C5"
+            android:layout_weight="1"
+            android:id="@+id/c5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <requestFocus />
+        </EditText>
+
+
+    </LinearLayout>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
