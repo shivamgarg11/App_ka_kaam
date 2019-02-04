@@ -365,7 +365,38 @@ public class gas_output extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Toast.makeText(gas_output.this, spinner.getSelectedItem().toString() + spinner2.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-                final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString())).child(String.valueOf(spinner2.getSelectedItemPosition()));
+                final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString())).child(String.valueOf(spinner2.getSelectedItemPosition()+1).toString());
+                myRef1.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                        {
+                            String csvWrite = "Year,Month,date,bill,difference,input,mmbto,ride,scm\n";
+                            csvWrite+=spinner.getSelectedItem().toString()+",";
+                            csvWrite+=spinner2.getSelectedItem().toString()+",";
+                            for(DataSnapshot datesIter : dataSnapshot.getChildren())
+                            {
+                                csvWrite+=datesIter.getKey()+",";
+                                for(DataSnapshot dayIter : datesIter.getChildren()) {
+                                    csvWrite += dayIter.getValue() + ",";
+                                    Log.d("dateIter", "onDataChange: " + dayIter.getValue());
+
+                                }
+                                csvWrite+="\n";
+
+                            }
+
+                            Log.d("csvWrite", "onDataChange: " + csvWrite);
+                        }
+                        else
+                            Toast.makeText(gas_output.this, "Entry Doesn't Exist", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
                 Log.d("DATEtime", spinner.getSelectedItem().toString() + " " +(spinner2.getSelectedItemPosition()+1));
 
@@ -404,6 +435,33 @@ public class gas_output extends AppCompatActivity {
                     }
                 }, 2019, 01, 01).show();
 
+
+            }
+        });
+
+        date2Im.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(gas_output.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        if(monthOfYear<9)
+                            dateEnd =""+year+"/0"+(monthOfYear+1)+"/"+dayOfMonth;
+                        else
+                            dateEnd =+year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
+                        tvDateEnd.setText(String.valueOf(dayOfMonth) +"/"+ String.valueOf(monthOfYear) +"/"+ String.valueOf(year));
+
+                    }
+                }, 2019, 01, 01).show();
+
+
+            }
+        });
+
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 
             }
         });
