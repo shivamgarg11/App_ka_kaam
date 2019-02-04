@@ -37,8 +37,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -140,7 +138,8 @@ public class gas_output extends AppCompatActivity {
                                 }
                                 else if(selected == 1){dialog.dismiss();selMonth();}
 
-                                else{dialog.dismiss();selWeek();}
+                                else{dialog.dismiss();
+                                    selRange();}
                             }
                         })
                         .setNegativeButton("Back", new DialogInterface.OnClickListener() {
@@ -278,7 +277,7 @@ public class gas_output extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
 
-                writeCSV += "bill,difference,input,mmbto,ride,scm,time\n";
+                writeCSV += "year,month,date,bill,difference,input,mmbto,ride,scm,time\n";
                 final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString()));
                 myRef1.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -287,11 +286,11 @@ public class gas_output extends AppCompatActivity {
                             for(DataSnapshot yearIter : dataSnapshot.getChildren())
                             {
                                 Log.d("201999", "onDataChange: " + yearIter.getKey() +"End");
-//                                writeCSV += spinner.getSelectedItem().toString()+",";
-//                                writeCSV += yearIter.getKey()+",";
+                                writeCSV += spinner.getSelectedItem().toString()+",";
+                                writeCSV += yearIter.getKey()+",";
                                 for( DataSnapshot monthIter : yearIter.getChildren())
                                 {
-//                                    writeCSV += monthIter.getKey()+",";
+                                    writeCSV += monthIter.getKey()+",";
                                     for(DataSnapshot dayIter: monthIter.getChildren())
                                     {
 //                                            writeCSV += dayIter.
@@ -301,7 +300,6 @@ public class gas_output extends AppCompatActivity {
                                 }
                             }
                             Log.d("writecsv", "onDataChange: " + writeCSV);
-
                         }
 
 
@@ -354,12 +352,19 @@ public class gas_output extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(gas_output.this,android.R.layout.simple_spinner_item,arrayList);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+
         spinner.setAdapter(adapter1);
         spinner2.setAdapter(adapter2);
+        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Toast.makeText(gas_output.this, spinner.getSelectedItem().toString() + spinner2.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString())).child(String.valueOf(spinner2.getSelectedItemPosition()));
+
+                Log.d("DATEtime", spinner.getSelectedItem().toString() + " " +(spinner2.getSelectedItemPosition()+1));
+
             }
         });
         builder.setView(view);
@@ -371,7 +376,7 @@ public class gas_output extends AppCompatActivity {
 
     String dateStart = "";
     String dateEnd = "";
-    public void selWeek(){
+    public void selRange(){
         Toast.makeText(this, "" + gasDownload[selected] , Toast.LENGTH_SHORT).show();
         final AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
         View view = getLayoutInflater().inflate(R.layout.date_range,null);
@@ -407,7 +412,7 @@ public class gas_output extends AppCompatActivity {
 
     Map<String,String> value;
 
-    public String csvPart()
+    public String csvPart(String data)
     {
 
         Employee emp1 = new Employee(1, "FirstName1", "LastName1", 10000);
