@@ -201,6 +201,8 @@ public class gas_output extends AppCompatActivity {
                 .findViewById(R.id.c3);
         final EditText c4 = (EditText) changeconstant
                 .findViewById(R.id.c4);
+        final EditText c5 = (EditText) changeconstant
+                .findViewById(R.id.c5);
 
         // set dialog message
         alertDialogBuilder
@@ -213,13 +215,14 @@ public class gas_output extends AppCompatActivity {
                                 final String strc2=c2.getText().toString()+"";
                                 final String strc3=c3.getText().toString()+"";
                                 final String strc4=c4.getText().toString()+"";
+                                final String strc5=c5.getText().toString()+"";
 
-                                if(strc1.length()==0||strc2.length()==0||strc3.length()==0||strc4.length()==0){
+                                if(strc1.length()==0||strc2.length()==0||strc3.length()==0||strc4.length()==0||strc5.length()==0){
                                     FancyToast.makeText(gas_output.this,"INVALID INPUTS",Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
                                 }else{
                                     final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
                                     final DatabaseReference myRef1 = database1.getReference("GAS"+pathway).child("CONSTANTS");
-                                    gasconstants con=new gasconstants(Double.valueOf(strc1),Double.valueOf(strc2),Double.valueOf(strc3),Double.valueOf(strc4),1000000);
+                                    gasconstants con=new gasconstants(Double.valueOf(strc1),Double.valueOf(strc2),Double.valueOf(strc3),Double.valueOf(strc4),Double.valueOf(strc5));
                                     myRef1.setValue(con);
                                 }
                             }
@@ -246,6 +249,7 @@ public class gas_output extends AppCompatActivity {
                 c2.setText(con.getC2()+"");
                 c3.setText(con.getC3()+"");
                 c4.setText(con.getC4()+"");
+                c5.setText(con.getC5()+"");
                 alertDialog.show();
             }
             @Override
