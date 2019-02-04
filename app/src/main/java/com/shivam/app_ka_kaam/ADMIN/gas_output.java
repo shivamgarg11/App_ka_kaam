@@ -5,16 +5,13 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,17 +23,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shivam.app_ka_kaam.R;
+import com.shivam.app_ka_kaam.sampleUtil.Employee;
 
-import org.json.JSONObject;
-
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.List;
+import java.util.Map;
 
 public class gas_output extends AppCompatActivity {
 
@@ -133,6 +133,7 @@ public class gas_output extends AppCompatActivity {
 
     int year = Calendar.getInstance().get(Calendar.YEAR);
     public ArrayList<String> arr = new ArrayList<>();
+    String writeCSV="";
 
     public void selYear(){
         AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
@@ -150,16 +151,32 @@ public class gas_output extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
 
+                writeCSV += "bill,difference,input,mmbto,ride,scm,time\n";
                 final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString()));
                 myRef1.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists())
-                        {
-                            for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
-                                Log.d("20199", "onDataChange: "+messageSnapshot.getValue());
+                        if(dataSnapshot.exists()) {
+                            for(DataSnapshot yearIter : dataSnapshot.getChildren())
+                            {
+                                Log.d("201999", "onDataChange: " + yearIter.getKey() +"End");
+//                                writeCSV += spinner.getSelectedItem().toString()+",";
+//                                writeCSV += yearIter.getKey()+",";
+                                for( DataSnapshot monthIter : yearIter.getChildren())
+                                {
+//                                    writeCSV += monthIter.getKey()+",";
+                                    for(DataSnapshot dayIter: monthIter.getChildren())
+                                    {
+//                                            writeCSV += dayIter.
+                                            writeCSV += dayIter.getValue()+",";
+                                    }
+                                    writeCSV+="\n";
+                                }
                             }
+                            Log.d("writecsv", "onDataChange: " + writeCSV);
+
                         }
+
 
                         else{
                             Toast.makeText(gas_output.this,"Entry Doesn't Exist",Toast.LENGTH_LONG).show();
@@ -295,6 +312,80 @@ public class gas_output extends AppCompatActivity {
         dialog.show();
     }
 
+    Map<String,String> value;
+
+    public String csvPart()
+    {
+
+        Employee emp1 = new Employee(1, "FirstName1", "LastName1", 10000);
+        Employee emp2 = new Employee(2, "FirstName2", "LastName2", 20000);
+        Employee emp3 = new Employee(3, "FirstName3", "LastName3", 30000);
+        Employee emp4 = new Employee(4, "FirstName4", "LastName4", 40000);
+        Employee emp5 = new Employee(5, "FirstName5", "LastName5", 50000);
+
+        //Add Employee objects to a list
+        List empList = new ArrayList();
+        empList.add(emp1);
+        empList.add(emp2);
+        empList.add(emp3);
+        empList.add(emp4);
+        empList.add(emp5);
+
+
+        String a = empList.get(0).toString();
+        a = a + "\n" + empList.get(1).toString();
+
+        //        String a = "1,2,4,5,6";
+        Log.d("MessageFirst A", "onCreate: " + a);
+        String filePath = "/storage/emulated/0/Download/employee.csv";
+//        String
+        try {
+            String content = "Separe here integers by semi-colon";
+            File file = new File(filePath);
+            // if file doesnt exists, then create it
+            try {
+                if (!file.exists()) {
+                    new File(file.getParent()).mkdirs();
+                    file.createNewFile();
+                }
+            } catch (IOException e) {
+                Log.e("", "Could not create file.", e);
+                return "";
+            }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(value.toString());
+            Log.d("MessageHere", a);
+            bw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Check for Success by reading
+
+        String b = "";
+        BufferedReader br = null;
+        try {
+            String sCurrentLine;
+            br = new BufferedReader(new FileReader("/storage/emulated/0/Download/employee.csv"));
+            while ((sCurrentLine = br.readLine()) != null) {
+                b = b + sCurrentLine;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try {
+                if (br != null) br.close();
+                Log.d("MessageHereRead", "onCreate: " + b);
+            } catch (IOException ex) {
+                Log.d("MainActivity.java", "csvPart: Error");
+            }
+        }
+        return "";
+    }
 
 
     @Override
