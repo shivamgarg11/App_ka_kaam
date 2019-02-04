@@ -13,12 +13,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-<<<<<<< HEAD
 import android.widget.EditText;
-=======
+
 import android.widget.ImageView;
 import android.widget.Spinner;
->>>>>>> 4e85122149d099dde62af41e40197ad3fd1ef3e0
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,12 +25,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-<<<<<<< HEAD
 import com.shivam.app_ka_kaam.Java_objects.gasconstants;
 
 import com.shashank.sony.fancytoastlib.FancyToast;
-=======
->>>>>>> 4e85122149d099dde62af41e40197ad3fd1ef3e0
 import com.shivam.app_ka_kaam.R;
 import com.shivam.app_ka_kaam.sampleUtil.Employee;
 
@@ -51,13 +46,9 @@ import java.util.Map;
 
 public class gas_output extends AppCompatActivity {
 
-<<<<<<< HEAD
     String pathway="";
-
-=======
     final String[] gasDownload = new String[]{"Yearly","Monthly","Date Range"};
     int selected=gasDownload.length-1;
->>>>>>> 4e85122149d099dde62af41e40197ad3fd1ef3e0
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +57,47 @@ public class gas_output extends AppCompatActivity {
          pathway=getIntent().getStringExtra("path");
         TextView path=findViewById(R.id.path);
         path.setText("ADMIN/GAS/"+pathway);
-        //////////////////////////////////
 
+
+
+        //////////////////////////////////
+        Button setting =findViewById(R.id.setting);
+        setting.setOnClickListener(new View.OnClickListener() {
+            String []arr={"CHANGE CONSTANTS","CHANGE RANGE","PASSWORD RESET"};
+            int selected=arr.length-1;
+            @Override
+            public void onClick(View v) {
+                AlertDialog dialog=new AlertDialog.Builder(gas_output.this)
+                        .setIcon(R.drawable.logoo)
+                        .setTitle("              SETTING")
+                        .setSingleChoiceItems(arr, arr.length-1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                selected = which;
+                            }
+                        })
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(selected==0){
+                                    changeconstant();
+                                }
+
+
+
+
+                            }
+                        })
+                        .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .create();
+                dialog.show();
+            }
+        });
         //////////////////////////////////
 
         Button goback=findViewById(R.id.goback);
@@ -125,6 +155,8 @@ public class gas_output extends AppCompatActivity {
         });
 
         final String[] date = {""};
+
+
         Button summary=findViewById(R.id.summary);
         summary.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +178,85 @@ public class gas_output extends AppCompatActivity {
         });
 
     }
+
+
+
+
+    public void changeconstant(){
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(gas_output.this);
+        View changeconstant = li.inflate(R.layout.setgasconstants, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                gas_output.this);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(changeconstant);
+
+        final EditText c1 = (EditText) changeconstant
+                .findViewById(R.id.c1);
+        final EditText c2 = (EditText) changeconstant
+                .findViewById(R.id.c2);
+        final EditText c3 = (EditText) changeconstant
+                .findViewById(R.id.c3);
+        final EditText c4 = (EditText) changeconstant
+                .findViewById(R.id.c4);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+
+                                final String strc1=c1.getText().toString()+"";
+                                final String strc2=c2.getText().toString()+"";
+                                final String strc3=c3.getText().toString()+"";
+                                final String strc4=c4.getText().toString()+"";
+
+                                if(strc1.length()==0||strc2.length()==0||strc3.length()==0||strc4.length()==0){
+                                    FancyToast.makeText(gas_output.this,"INVALID INPUTS",Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                                }else{
+                                    final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                                    final DatabaseReference myRef1 = database1.getReference("GAS"+pathway).child("CONSTANTS");
+                                    gasconstants con=new gasconstants(Double.valueOf(strc1),Double.valueOf(strc2),Double.valueOf(strc3),Double.valueOf(strc4),1000000);
+                                    myRef1.setValue(con);
+                                }
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef1 = database1.getReference("GAS"+pathway).child("CONSTANTS");
+
+        myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                gasconstants con =dataSnapshot.getValue(gasconstants.class);
+                c1.setText(con.getC1()+"");
+                c2.setText(con.getC2()+"");
+                c3.setText(con.getC3()+"");
+                c4.setText(con.getC4()+"");
+                alertDialog.show();
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("TAG", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+
 
     int year = Calendar.getInstance().get(Calendar.YEAR);
     public ArrayList<String> arr = new ArrayList<>();
@@ -256,6 +367,8 @@ public class gas_output extends AppCompatActivity {
         dialog.show();
 
     }
+
+
     String dateStart = "";
     String dateEnd = "";
     public void selWeek(){
@@ -286,182 +399,11 @@ public class gas_output extends AppCompatActivity {
             }
         });
 
-<<<<<<< HEAD
-
-
-
-
-Button setting =findViewById(R.id.setting);
-setting.setOnClickListener(new View.OnClickListener() {
-    String []arr={"CHANGE CONSTANTS","CHANGE RANGE","PASSWORD RESET"};
-    int selected=arr.length-1;
-    @Override
-    public void onClick(View v) {
-        AlertDialog dialog=new AlertDialog.Builder(gas_output.this)
-                .setIcon(R.drawable.logoo)
-                .setTitle("              SETTING")
-                .setSingleChoiceItems(arr, arr.length-1, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selected = which;
-                    }
-                })
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                       if(selected==0){
-                           changeconstant();
-                       }
-
-
-
-
-                    }
-                })
-                .setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .create();
-        dialog.show();
-    }
-});
-
-
-
-
     }
 
 
 
-    public void changeconstant(){
-        // get prompts.xml view
-        LayoutInflater li = LayoutInflater.from(gas_output.this);
-        View changeconstant = li.inflate(R.layout.setgasconstants, null);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                gas_output.this);
-
-        // set prompts.xml to alertdialog builder
-        alertDialogBuilder.setView(changeconstant);
-
-        final EditText c1 = (EditText) changeconstant
-                .findViewById(R.id.c1);
-        final EditText c2 = (EditText) changeconstant
-                .findViewById(R.id.c2);
-        final EditText c3 = (EditText) changeconstant
-                .findViewById(R.id.c3);
-        final EditText c4 = (EditText) changeconstant
-                .findViewById(R.id.c4);
-
-
-        // set dialog message
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-
-                                final String strc1=c1.getText().toString()+"";
-                                final String strc2=c2.getText().toString()+"";
-                                final String strc3=c3.getText().toString()+"";
-                                final String strc4=c4.getText().toString()+"";
-
-                                if(strc1.length()==0||strc2.length()==0||strc3.length()==0||strc4.length()==0){
-                                    FancyToast.makeText(gas_output.this,"INVALID INPUTS",Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
-                                }else{
-                                    final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-                                    final DatabaseReference myRef1 = database1.getReference("GAS"+pathway).child("CONSTANTS");
-                                    gasconstants con=new gasconstants(Double.valueOf(strc1),Double.valueOf(strc2),Double.valueOf(strc3),Double.valueOf(strc4),1000000);
-                                    myRef1.setValue(con);
-                                }
-
-
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        // create alert dialog
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-
-
-
-
-        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef1 = database1.getReference("GAS"+pathway).child("CONSTANTS");
-
-
-
-        myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                gasconstants con =dataSnapshot.getValue(gasconstants.class);
-                c1.setText(con.getC1()+"");
-                c2.setText(con.getC2()+"");
-                c3.setText(con.getC3()+"");
-                c4.setText(con.getC4()+"");
-                alertDialog.show();
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("TAG", "Failed to read value.", error.toException());
-=======
-        date2Im.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new DatePickerDialog(gas_output.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        if(monthOfYear<9)
-                            dateEnd =""+year+"/0"+(monthOfYear+1)+"/"+dayOfMonth;
-                        else
-                            dateEnd =""+year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
-
-                        tvDateEnd.setText(String.valueOf(dayOfMonth) +"/"+ String.valueOf(monthOfYear) +"/"+ String.valueOf(year));
-
-                    }
-                }, 2019, 01, 01).show();
-
-            }
-        });
-
-
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-                    Log.d("DateRange", "onClick: " + sdf.parse(dateStart).before(sdf.parse(dateEnd)));
-                    Log.d("DateRan", "onClick: " +dateStart + dateEnd);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
->>>>>>> 4e85122149d099dde62af41e40197ad3fd1ef3e0
-            }
-        });
-
-
-
-
-<<<<<<< HEAD
-=======
-        builder.setView(view);
-        AlertDialog dialog = builder.create();
-        dialog.show();
->>>>>>> 4e85122149d099dde62af41e40197ad3fd1ef3e0
-    }
 
     Map<String,String> value;
 
