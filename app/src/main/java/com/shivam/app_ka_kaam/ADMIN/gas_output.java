@@ -210,30 +210,6 @@ public class gas_output extends AppCompatActivity {
                 dialog.show();
             }
         });
-
-
-
-        Button summary = findViewById(R.id.summary);
-        summary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(gas_output.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        if (monthOfYear < 9)
-                            date[0] = "" + year + "0" + (monthOfYear + 1) + dayOfMonth;
-                        else
-                            date[0] = "" + year + (monthOfYear + 1) + dayOfMonth;
-                        Intent i = new Intent(gas_output.this, gassummary.class);
-                        i.putExtra("DATE", date[0]);
-                        startActivity(i);
-                        finish();
-                    }
-                }, 2019, 01, 01).show();
-            }
-        });
-
-
     }
 
 
