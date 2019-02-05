@@ -2,10 +2,18 @@ package com.shivam.app_ka_kaam.ADMIN;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import com.shivam.app_ka_kaam.Fragments.gassummaryfrag;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,9 +32,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.shivam.app_ka_kaam.Java_objects.gasconstants;
-
 import com.shashank.sony.fancytoastlib.FancyToast;
+import com.shivam.app_ka_kaam.Fragments.gassummaryfrag;
+import com.shivam.app_ka_kaam.Java_objects.gasconstants;
 import com.shivam.app_ka_kaam.R;
 
 import java.io.BufferedWriter;
@@ -40,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Map;
 
 public class gas_output extends AppCompatActivity {
     int it = 0;
@@ -301,7 +307,7 @@ public class gas_output extends AppCompatActivity {
     String writeCSV = "";
 
     public void selYear() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
         View view = getLayoutInflater().inflate(R.layout.spinner_dialog, null);
         builder.setTitle("Select Year to View Report");
         final Spinner spinner = view.findViewById(R.id.spinner);
@@ -348,14 +354,18 @@ public class gas_output extends AppCompatActivity {
 
                     }
                 });
+                sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + "Year" + ".csv");
+
             }
         });
         csvPart(csvWrite, "Year");
+        sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + "Year" + ".csv");
+
+
         builder.setView(view);
         AlertDialog dialog = builder.create();
         dialog.show();
         Log.d("Years", "selYear: " + arr.get(0) + arr.get(4));
-
     }
 
     public void selMonth() {
@@ -419,6 +429,8 @@ public class gas_output extends AppCompatActivity {
                             Log.d("csvWrite", "onDataChange: " + csvWrite);
                             csvPart(csvWrite, "Month");
 
+
+
                         } else
                             Toast.makeText(gas_output.this, "Entry Doesn't Exist", Toast.LENGTH_SHORT).show();
                     }
@@ -429,7 +441,11 @@ public class gas_output extends AppCompatActivity {
                     }
                 });
 
+
+
                 Log.d("DATEtime", spinner.getSelectedItem().toString() + " " + (spinner2.getSelectedItemPosition() + 1));
+
+                sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + "Month" + ".csv");
 
             }
         });
@@ -560,6 +576,7 @@ public class gas_output extends AppCompatActivity {
 
                                                 Log.d("CSV", "selRange: " + csvWrite);
                                                 csvPart(csvWrite, "Range");
+                                                sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + "Range" + ".csv");
                                             }
 
 
@@ -592,6 +609,7 @@ public class gas_output extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+
     }
 
     public String csvPart(String data, String name) {
@@ -617,11 +635,54 @@ public class gas_output extends AppCompatActivity {
             bw.write(data);
             bw.close();
 
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         return "";
     }
+
+    public void sendNotif(String path)
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        Uri selectedUri = Uri.parse(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/");
+        intent.setDataAndType(selectedUri, "text/csv");
+        intent = Intent.createChooser(intent, "Open folder");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+        createNotificationChannel();
+
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "1")
+                .setSmallIcon(R.drawable.logoo)
+                .setContentTitle("File Downloaded")
+                .setContentText("Tap to View")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setSound(uri)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+        notificationManager.notify(0, mBuilder.build());
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "channel";
+            String description = "Desc";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 
 
     @Override
