@@ -41,6 +41,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -205,7 +207,8 @@ public class gas_output extends AppCompatActivity {
                                 }
                                 else if(selected == 1){dialog.dismiss();selMonth();}
 
-                                else{dialog.dismiss();selWeek();}
+                                else{dialog.dismiss();
+                                    selRange();}
                             }
                         })
                         .setNegativeButton("Back", new DialogInterface.OnClickListener() {
@@ -326,7 +329,7 @@ public class gas_output extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
 
-                writeCSV += "bill,difference,input,mmbto,ride,scm,time\n";
+                writeCSV += "year,month,date,bill,difference,input,mmbto,ride,scm,time\n";
                 final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString()));
                 myRef1.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -335,11 +338,11 @@ public class gas_output extends AppCompatActivity {
                             for(DataSnapshot yearIter : dataSnapshot.getChildren())
                             {
                                 Log.d("201999", "onDataChange: " + yearIter.getKey() +"End");
-//                                writeCSV += spinner.getSelectedItem().toString()+",";
-//                                writeCSV += yearIter.getKey()+",";
+                                writeCSV += spinner.getSelectedItem().toString()+",";
+                                writeCSV += yearIter.getKey()+",";
                                 for( DataSnapshot monthIter : yearIter.getChildren())
                                 {
-//                                    writeCSV += monthIter.getKey()+",";
+                                    writeCSV += monthIter.getKey()+",";
                                     for(DataSnapshot dayIter: monthIter.getChildren())
                                     {
 //                                            writeCSV += dayIter.
@@ -349,7 +352,6 @@ public class gas_output extends AppCompatActivity {
                                 }
                             }
                             Log.d("writecsv", "onDataChange: " + writeCSV);
-
                         }
 
 
@@ -402,12 +404,50 @@ public class gas_output extends AppCompatActivity {
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(gas_output.this,android.R.layout.simple_spinner_item,arrayList);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+
         spinner.setAdapter(adapter1);
         spinner2.setAdapter(adapter2);
+        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Toast.makeText(gas_output.this, spinner.getSelectedItem().toString() + spinner2.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString())).child(String.valueOf(spinner2.getSelectedItemPosition()+1).toString());
+                myRef1.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists())
+                        {
+                            String csvWrite = "Year,Month,date,bill,difference,input,mmbto,ride,scm\n";
+                            csvWrite+=spinner.getSelectedItem().toString()+",";
+                            csvWrite+=spinner2.getSelectedItem().toString()+",";
+                            for(DataSnapshot datesIter : dataSnapshot.getChildren())
+                            {
+                                csvWrite+=datesIter.getKey()+",";
+                                for(DataSnapshot dayIter : datesIter.getChildren()) {
+                                    csvWrite += dayIter.getValue() + ",";
+                                    Log.d("dateIter", "onDataChange: " + dayIter.getValue());
+
+                                }
+                                csvWrite+="\n";
+
+                            }
+
+                            Log.d("csvWrite", "onDataChange: " + csvWrite);
+                        }
+                        else
+                            Toast.makeText(gas_output.this, "Entry Doesn't Exist", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                Log.d("DATEtime", spinner.getSelectedItem().toString() + " " +(spinner2.getSelectedItemPosition()+1));
+
             }
         });
         builder.setView(view);
@@ -419,7 +459,7 @@ public class gas_output extends AppCompatActivity {
 
     String dateStart = "";
     String dateEnd = "";
-    public void selWeek(){
+    public void selRange(){
         Toast.makeText(this, "" + gasDownload[selected] , Toast.LENGTH_SHORT).show();
         final AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
         View view = getLayoutInflater().inflate(R.layout.date_range,null);
@@ -447,6 +487,72 @@ public class gas_output extends AppCompatActivity {
             }
         });
 
+        date2Im.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(gas_output.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        if(monthOfYear<9)
+                            dateEnd =""+year+"/0"+(monthOfYear+1)+"/"+dayOfMonth;
+                        else
+                            dateEnd =+year+"/"+(monthOfYear+1)+"/"+dayOfMonth;
+                        tvDateEnd.setText(String.valueOf(dayOfMonth) +"/"+ String.valueOf(monthOfYear) +"/"+ String.valueOf(year));
+
+                    }
+                }, 2019, 01, 01).show();
+
+
+            }
+        });
+
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                Date date2,date1;
+                String csvWrite = "Year,Month,date,bill,difference,input,mmbto,ride,scm\n";
+
+                try {
+                  date1 = new SimpleDateFormat("dd/MM/yyyy").parse(dateStart);
+
+                    date2 = new SimpleDateFormat("dd/MM/yyyy").parse(dateEnd);
+
+                    if(date1.after(date2))
+                    {
+                        Toast.makeText(gas_output.this, "Please Check the dates!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    else
+                    {
+                        Calendar calendar1 = new GregorianCalendar();
+                        calendar1.setTime(date1);
+                        Calendar calendar2 = new GregorianCalendar();
+                        calendar2.setTime(date2);
+                        int year1 = calendar1.get(Calendar.YEAR);
+                        int month1 = calendar1.get(Calendar.MONTH)+1;
+                        int day1 = calendar1.get(Calendar.DAY_OF_MONTH);
+
+
+                        int year2 = calendar2.get(Calendar.YEAR);
+                        int month2 = calendar2.get(Calendar.MONTH)+1;
+                        int day2 = calendar2.get(Calendar.DAY_OF_MONTH);
+
+                        if(year1 == year2)
+                        {
+                            final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                            final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(year1));
+                        }
+                    }
+                } catch (ParseException e) {
+                    Toast.makeText(gas_output.this, "Dates could not be parsed, Please try again!", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+
     }
 
 
@@ -455,7 +561,7 @@ public class gas_output extends AppCompatActivity {
 
     Map<String,String> value;
 
-    public String csvPart()
+    public String csvPart(String data)
     {
 
         Employee emp1 = new Employee(1, "FirstName1", "LastName1", 10000);
