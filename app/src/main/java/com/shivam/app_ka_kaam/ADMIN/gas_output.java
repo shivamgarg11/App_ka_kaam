@@ -594,13 +594,10 @@ public class gas_output extends AppCompatActivity {
 
     }
 
-
-    Map<String, String> value;
-
     public String csvPart(String data, String name) {
 
         //        String a = "1,2,4,5,6";
-        String filePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + name + ".csv";
+        String filePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + name + ".csv";
 //        String
         try {
             String content = "Separe here integers by semi-colon";
@@ -623,29 +620,6 @@ public class gas_output extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //Check for Success by reading
-
-//        String b = "";
-//        BufferedReader br = null;
-//        try {
-//            String sCurrentLine;
-//            br = new BufferedReader(new FileReader("/storage/emulated/0/Download/employee.csv"));
-//            while ((sCurrentLine = br.readLine()) != null) {
-//                b = b + sCurrentLine;
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        finally
-//        {
-//            try {
-//                if (br != null) br.close();
-//                Log.d("MessageHereRead", "onCreate: " + b);
-//            } catch (IOException ex) {
-//                Log.d("MainActivity.java", "csvPart: Error");
-//            }
-//        }
         return "";
     }
 
