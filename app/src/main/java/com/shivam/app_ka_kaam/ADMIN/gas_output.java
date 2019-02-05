@@ -14,7 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-
+import com.shivam.app_ka_kaam.Fragments.gassummaryfrag;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -58,6 +58,64 @@ public class gas_output extends AppCompatActivity {
         TextView path = findViewById(R.id.path);
         path.setText("ADMIN/GAS/" + pathway);
 
+/////////////////////////////
+
+
+        Button today=findViewById(R.id.today);
+        today.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
+                final String todaydate = dateformat.format(c.getTime());
+                String passingstr =todaydate.substring(0,4)+todaydate.substring(5,7)+todaydate.substring(8);
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                gassummaryfrag frag = new gassummaryfrag(passingstr,gas_output.this);
+                fragmentManager.beginTransaction().replace(R.id.frame, frag).commit();
+            }
+        });
+
+        today.performClick();
+
+        Button yesterday=findViewById(R.id.yesterday);
+        yesterday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.DATE,-1);
+                SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
+                final String yesterdaydate = dateformat.format(c.getTime());
+                String passingstr =yesterdaydate.substring(0,4)+yesterdaydate.substring(5,7)+yesterdaydate.substring(8);
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                gassummaryfrag frag = new gassummaryfrag(passingstr,gas_output.this);
+                fragmentManager.beginTransaction().replace(R.id.frame, frag).commit();
+            }
+        });
+
+
+
+        final String[] date = {""};
+
+
+        Button summary=findViewById(R.id.summary);
+        summary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(gas_output.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        if(monthOfYear<9)
+                            date[0] =""+year+"0"+(monthOfYear+1)+dayOfMonth;
+                        else
+                            date[0] =""+year+(monthOfYear+1)+dayOfMonth;
+                        android.app.FragmentManager fragmentManager = getFragmentManager();
+                        gassummaryfrag frag = new gassummaryfrag(date[0],gas_output.this);
+                        fragmentManager.beginTransaction().replace(R.id.frame, frag).commit();
+                    }
+                }, 2019, 01, 01).show();
+            }
+        });
+
 
         //////////////////////////////////
         Button setting = findViewById(R.id.setting);
@@ -96,7 +154,9 @@ public class gas_output extends AppCompatActivity {
                 dialog.show();
             }
         });
-        //////////////////////////////////
+
+
+
 
         Button goback = findViewById(R.id.goback);
         goback.setOnClickListener(new View.OnClickListener() {
@@ -150,28 +210,8 @@ public class gas_output extends AppCompatActivity {
             }
         });
 
-        final String[] date = {""};
 
 
-        Button summary = findViewById(R.id.summary);
-        summary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(gas_output.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        if (monthOfYear < 9)
-                            date[0] = "" + year + "0" + (monthOfYear + 1) + dayOfMonth;
-                        else
-                            date[0] = "" + year + (monthOfYear + 1) + dayOfMonth;
-                        Intent i = new Intent(gas_output.this, gassummary.class);
-                        i.putExtra("DATE", date[0]);
-                        startActivity(i);
-                        finish();
-                    }
-                }, 2019, 01, 01).show();
-            }
-        });
 
     }
 

@@ -21,8 +21,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
+import com.shivam.app_ka_kaam.Fragments.electricitysummaryfrag;
 import com.shivam.app_ka_kaam.Java_objects.electricityconstants;
 import com.shivam.app_ka_kaam.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class electricity_output extends AppCompatActivity {
@@ -39,18 +43,45 @@ public class electricity_output extends AppCompatActivity {
         path.setText("ADMIN/ELECTRICITY/"+pathway);
 
 
-        Button goback=findViewById(R.id.goback);
-        goback.setOnClickListener(new View.OnClickListener() {
+        /////////////////////////////
+
+
+        Button today=findViewById(R.id.today);
+        today.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(electricity_output.this, admin.class));
-                finish();
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
+                final String todaydate = dateformat.format(c.getTime());
+                String passingstr =todaydate.substring(0,4)+todaydate.substring(5,7)+todaydate.substring(8);
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                electricitysummaryfrag frag = new electricitysummaryfrag(passingstr,electricity_output.this,pathway);
+                fragmentManager.beginTransaction().replace(R.id.frame, frag).commit();
+            }
+        });
+
+        today.performClick();
+
+        Button yesterday=findViewById(R.id.yesterday);
+        yesterday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.DATE,-1);
+                SimpleDateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
+                final String yesterdaydate = dateformat.format(c.getTime());
+                String passingstr =yesterdaydate.substring(0,4)+yesterdaydate.substring(5,7)+yesterdaydate.substring(8);
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                electricitysummaryfrag frag = new electricitysummaryfrag(passingstr,electricity_output.this,pathway);
+                fragmentManager.beginTransaction().replace(R.id.frame, frag).commit();
             }
         });
 
 
 
         final String[] date = {""};
+
+
         Button summary=findViewById(R.id.summary);
         summary.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,17 +93,16 @@ public class electricity_output extends AppCompatActivity {
                             date[0] =""+year+"0"+(monthOfYear+1)+dayOfMonth;
                         else
                             date[0] =""+year+(monthOfYear+1)+dayOfMonth;
-                        Intent i=new Intent(electricity_output.this,electricitysummary.class);
-                        i.putExtra("DATE",date[0]);
-                        i.putExtra("pathway",pathway);
-                        startActivity(i);
-                        finish();
+                        android.app.FragmentManager fragmentManager = getFragmentManager();
+                        electricitysummaryfrag frag = new electricitysummaryfrag(date[0],electricity_output.this,pathway);
+                        fragmentManager.beginTransaction().replace(R.id.frame, frag).commit();
                     }
                 }, 2019, 01, 01).show();
             }
         });
 
 
+        //////////////////////////////////
         Button setting =findViewById(R.id.setting);
         setting.setOnClickListener(new View.OnClickListener() {
             String []arr={"CHANGE CONSTANTS","CHANGE RANGE","PASSWORD RESET"};
@@ -114,8 +144,22 @@ public class electricity_output extends AppCompatActivity {
 
 
 
-    }
+        Button goback=findViewById(R.id.goback);
+        goback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(electricity_output.this, admin.class));
+                finish();
+            }
+        });
 
+
+
+
+        //////////////////////////////////
+
+
+    }
 
 
     public void changeconstant(){
@@ -136,7 +180,6 @@ public class electricity_output extends AppCompatActivity {
         final EditText c3 = (EditText) changeconstant
                 .findViewById(R.id.c3);
 
-
         // set dialog message
         alertDialogBuilder
                 .setCancelable(false)
@@ -156,8 +199,6 @@ public class electricity_output extends AppCompatActivity {
                                     electricityconstants con=new electricityconstants(Double.valueOf(strc1),Double.valueOf(strc2),Double.valueOf(strc3));
                                     myRef1.setValue(con);
                                 }
-
-
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -169,16 +210,9 @@ public class electricity_output extends AppCompatActivity {
 
         // create alert dialog
         final AlertDialog alertDialog = alertDialogBuilder.create();
-
         // show it
-
-
-
-
         final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
         final DatabaseReference myRef1 = database1.getReference("ELECTRICITY"+pathway).child("CONSTANTS");
-
-
 
         myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -196,12 +230,7 @@ public class electricity_output extends AppCompatActivity {
                 Log.w("TAG", "Failed to read value.", error.toException());
             }
         });
-
-
-
-
     }
-
 
 
     @Override
