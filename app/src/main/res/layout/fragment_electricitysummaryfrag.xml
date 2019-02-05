@@ -21,10 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DATE "
-        style="@style/TextAppearance.AppCompat.Headline"
+        style="@style/TextAppearance.AppCompat.Subhead"
         android:textStyle="bold"
-        android:background="#bfffffff"
-        android:padding="2dp"/>
+        android:background="#bfffffff" />
 
     <TextView
         android:gravity="center"
