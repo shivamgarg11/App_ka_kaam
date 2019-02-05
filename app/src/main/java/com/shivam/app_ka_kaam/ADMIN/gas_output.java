@@ -37,8 +37,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -462,6 +466,45 @@ public class gas_output extends AppCompatActivity {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+                Date date2,date1;
+                String csvWrite = "Year,Month,date,bill,difference,input,mmbto,ride,scm\n";
+
+                try {
+                  date1 = new SimpleDateFormat("dd/MM/yyyy").parse(dateStart);
+
+                    date2 = new SimpleDateFormat("dd/MM/yyyy").parse(dateEnd);
+
+                    if(date1.after(date2))
+                    {
+                        Toast.makeText(gas_output.this, "Please Check the dates!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    else
+                    {
+                        Calendar calendar1 = new GregorianCalendar();
+                        calendar1.setTime(date1);
+                        Calendar calendar2 = new GregorianCalendar();
+                        calendar2.setTime(date2);
+                        int year1 = calendar1.get(Calendar.YEAR);
+                        int month1 = calendar1.get(Calendar.MONTH)+1;
+                        int day1 = calendar1.get(Calendar.DAY_OF_MONTH);
+
+
+                        int year2 = calendar2.get(Calendar.YEAR);
+                        int month2 = calendar2.get(Calendar.MONTH)+1;
+                        int day2 = calendar2.get(Calendar.DAY_OF_MONTH);
+
+                        if(year1 == year2)
+                        {
+                            final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                            final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(year1));
+                        }
+                    }
+                } catch (ParseException e) {
+                    Toast.makeText(gas_output.this, "Dates could not be parsed, Please try again!", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
