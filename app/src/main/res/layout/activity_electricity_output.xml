@@ -122,13 +122,12 @@
 
     <Button
         android:layout_gravity="right|bottom"
-        android:layout_marginLeft="10dp"
         android:id="@+id/setting"
         android:background="#d9ece6e6"
         android:text="SETTINGS"
+        android:padding="5dp"
+        android:textSize="20dp"
         android:textStyle="bold"
-        style="@style/TextAppearance.AppCompat.Headline"
-        android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
