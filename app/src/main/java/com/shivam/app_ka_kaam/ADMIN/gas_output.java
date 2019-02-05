@@ -337,7 +337,7 @@ public class gas_output extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
 
-                writeCSV += "year,month,date,bill,difference,input,mmbto,ride,scm,time,\n";
+                writeCSV += "year,month,date,bill,difference,input,mmbto,ride,scm, time,\n";
                 final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString()));
                 myRef1.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -368,10 +368,12 @@ public class gas_output extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
+
                 });
+
             }
         });
-        csvPart(csvWrite, "Year");
+
         builder.setView(view);
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -645,28 +647,7 @@ public class gas_output extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //Check for Success by reading
 
-//        String b = "";
-//        BufferedReader br = null;
-//        try {
-//            String sCurrentLine;
-//            br = new BufferedReader(new FileReader("/storage/emulated/0/Download/employee.csv"));
-//            while ((sCurrentLine = br.readLine()) != null) {
-//                b = b + sCurrentLine;
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        finally
-//        {
-//            try {
-//                if (br != null) br.close();
-//                Log.d("MessageHereRead", "onCreate: " + b);
-//            } catch (IOException ex) {
-//                Log.d("MainActivity.java", "csvPart: Error");
-//            }
-//        }
         return "";
     }
 
