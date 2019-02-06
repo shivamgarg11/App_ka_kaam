@@ -305,9 +305,10 @@ public class gas_output extends AppCompatActivity {
 
     int year = Calendar.getInstance().get(Calendar.YEAR);
     public ArrayList<String> arr = new ArrayList<>();
-    String writeCSV = "";
+
 
     public void selYear() {
+        final String[] writeCSV = {""};
         final AlertDialog.Builder builder = new AlertDialog.Builder(gas_output.this);
         View view = getLayoutInflater().inflate(R.layout.spinner_dialog, null);
         builder.setTitle("Select Year to View Report");
@@ -323,7 +324,7 @@ public class gas_output extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
 
-                writeCSV += "year,month,date,bill,difference,input,mmbto,ride,scm,time,\n";
+                writeCSV[0] += "year,month,date,bill,difference,input,mmbto,ride,scm,\n";
                 final DatabaseReference myRef1 = database1.getReference("GASMUKTA").child(String.valueOf(spinner.getSelectedItem().toString()));
                 myRef1.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -331,18 +332,20 @@ public class gas_output extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot yearIter : dataSnapshot.getChildren()) {
                                 Log.d("201999", "onDataChange: " + yearIter.getKey() + "End");
-                                writeCSV += spinner.getSelectedItem().toString() + ",";
-                                writeCSV += yearIter.getKey() + ",";
+                                writeCSV[0] += spinner.getSelectedItem().toString() + ",";
+                                writeCSV[0] += yearIter.getKey() + ",";
                                 for (DataSnapshot monthIter : yearIter.getChildren()) {
-                                    writeCSV += monthIter.getKey() + ",";
+                                    writeCSV[0] += monthIter.getKey() + ",";
                                     for (DataSnapshot dayIter : monthIter.getChildren()) {
 //                                            writeCSV += dayIter.
-                                        writeCSV += dayIter.getValue() + ",";
+                                        writeCSV[0] += dayIter.getValue() + ",";
                                     }
-                                    writeCSV += "\n";
+                                    writeCSV[0] += "\n";
                                 }
+
+                                csvPart(writeCSV[0], "Year");
                             }
-                            Log.d("writecsv", "onDataChange: " + writeCSV);
+                            Log.d("writecsv", "onDataChange: " + writeCSV[0]);
 
                         } else {
                             Toast.makeText(gas_output.this, "Entry Doesn't Exist", Toast.LENGTH_LONG).show();
@@ -359,7 +362,7 @@ public class gas_output extends AppCompatActivity {
 
             }
         });
-        csvPart(csvWrite, "Year");
+
         sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/Gas/" + "Year" + ".csv");
 
 
@@ -654,7 +657,7 @@ public class gas_output extends AppCompatActivity {
         intent.setDataAndType(selectedUri, "text/csv");
         intent = Intent.createChooser(intent, "Open folder");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(gas_output.this, 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(gas_output.this, 1, intent,  PendingIntent.FLAG_CANCEL_CURRENT);
         createNotificationChannel();
 
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
