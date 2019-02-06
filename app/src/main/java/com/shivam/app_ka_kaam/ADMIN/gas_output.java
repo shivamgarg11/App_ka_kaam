@@ -354,12 +354,12 @@ public class gas_output extends AppCompatActivity {
 
                     }
                 });
-                sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + "Year" + ".csv");
+                sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/Gas/" + "Year" + ".csv");
 
             }
         });
         csvPart(csvWrite, "Year");
-        sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + "Year" + ".csv");
+        sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/Gas/" + "Year" + ".csv");
 
 
         builder.setView(view);
@@ -445,7 +445,7 @@ public class gas_output extends AppCompatActivity {
 
                 Log.d("DATEtime", spinner.getSelectedItem().toString() + " " + (spinner2.getSelectedItemPosition() + 1));
 
-                sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + "Month" + ".csv");
+                sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/Gas/" + "Month" + ".csv");
 
             }
         });
@@ -576,7 +576,7 @@ public class gas_output extends AppCompatActivity {
 
                                                 Log.d("CSV", "selRange: " + csvWrite);
                                                 csvPart(csvWrite, "Range");
-                                                sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + "Range" + ".csv");
+                                                sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/Gas/" + "Range" + ".csv");
                                             }
 
 
@@ -615,7 +615,7 @@ public class gas_output extends AppCompatActivity {
     public static String csvPart(String data, String name) {
 
         //        String a = "1,2,4,5,6";
-        String filePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + name + ".csv";
+        String filePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/Gas/" + name + ".csv";
 //        String
         try {
             String content = "Separe here integers by semi-colon";
@@ -647,7 +647,7 @@ public class gas_output extends AppCompatActivity {
     {
 
 //        String path = android.os.Environment.getExternalStorageDirectory() + "/" + "App_Ka_Kaam/";
-        Uri selectedUri = Uri.parse(android.os.Environment.getExternalStorageDirectory() + "/" + "App_Ka_Kaam/");
+        Uri selectedUri = Uri.parse(android.os.Environment.getExternalStorageDirectory() + "/" + "App_Ka_Kaam/Gas/");
         Intent intent = new Intent(Intent.ACTION_VIEW,selectedUri);
 
         intent.setDataAndType(selectedUri, "resource/folder");
