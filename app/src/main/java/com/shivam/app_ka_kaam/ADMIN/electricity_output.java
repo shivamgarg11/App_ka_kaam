@@ -51,6 +51,7 @@ import java.util.GregorianCalendar;
 
 public class electricity_output extends AppCompatActivity {
 
+    // TODO: 06/02/19   resolve year fetch and heads of csv
     String pathway="";
     int it = 0;
     final String[] gasDownload = new String[]{"Yearly", "Monthly", "Date Range"};
@@ -659,7 +660,7 @@ public class electricity_output extends AppCompatActivity {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(electricity_output.this, "1")
                 .setSmallIcon(R.drawable.logoo)
                 .setContentTitle("File Downloaded")
-                .setContentText("Tap to View")
+                .setContentText("Goto your File Manager in " + electricity_output.this.getString(R.string.naam))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSound(uri)
                 .setContentIntent(pendingIntent)

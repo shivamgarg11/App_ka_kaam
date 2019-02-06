@@ -50,6 +50,7 @@ import java.util.GregorianCalendar;
 
 public class gas_output extends AppCompatActivity {
     int it = 0;
+    // TODO: 06/02/19 resolve year fetch
 
     String pathway = "";
     final String[] gasDownload = new String[]{"Yearly", "Monthly", "Date Range"};
@@ -650,16 +651,17 @@ public class gas_output extends AppCompatActivity {
         Uri selectedUri = Uri.parse(android.os.Environment.getExternalStorageDirectory() + "/" + "App_Ka_Kaam/Gas/");
         Intent intent = new Intent(Intent.ACTION_VIEW,selectedUri);
 
-        intent.setDataAndType(selectedUri, "resource/folder");
+        intent.setDataAndType(selectedUri, "text/csv");
+        intent = Intent.createChooser(intent, "Open folder");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(gas_output.this, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(gas_output.this, 1, intent, 0);
         createNotificationChannel();
 
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "1")
                 .setSmallIcon(R.drawable.logoo)
                 .setContentTitle("File Downloaded")
-                .setContentText("Tap to View")
+                .setContentText("Goto your File Manager in " + gas_output.this.getString(R.string.naam))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSound(uri)
                 .setContentIntent(pendingIntent)
