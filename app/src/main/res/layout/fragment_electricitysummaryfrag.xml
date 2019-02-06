@@ -48,7 +48,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="180dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="KWH :"/>
 
@@ -76,7 +76,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="180dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="DIFFERENCE KWH :"/>
 
@@ -104,7 +104,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="180dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="KVAH :"/>
 
@@ -160,7 +160,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="180dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="CALCULATED PF :"/>
 
@@ -188,9 +188,9 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="180dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="MPF :"/>
+            android:text="Meter  PF :"/>
 
         <TextView
             android:id="@+id/MPF"
@@ -216,9 +216,9 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="180dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="PF :"/>
+            android:text="Panel  PF :"/>
 
         <TextView
             android:id="@+id/PF"
@@ -246,7 +246,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="180dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="AMOUNT@ :"/>
 
@@ -278,7 +278,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="180dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="AMOUNT@ :"/>
 

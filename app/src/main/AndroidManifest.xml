@@ -15,18 +15,24 @@
         android:roundIcon="@drawable/logoo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".User.user" />
-        <activity android:name=".User.oil_input" />
-        <activity android:name=".User.gas_input" />
-        <activity android:name=".User.electricity_input" />
-        <activity android:name=".ADMIN.admin" />
+        <activity android:name=".User.user"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".User.oil_input"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".User.gas_input"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".User.electricity_input"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ADMIN.admin"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".sampleUtil.MyFirebaseInstanceIdService">
             <intent-filter>
@@ -39,9 +45,12 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ADMIN.gas_output" />
-        <activity android:name=".ADMIN.oil_output" />
-        <activity android:name=".ADMIN.electricity_output" />
+        <activity android:name=".ADMIN.gas_output"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ADMIN.oil_output"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ADMIN.electricity_output"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

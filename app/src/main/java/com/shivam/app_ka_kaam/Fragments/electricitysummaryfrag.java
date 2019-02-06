@@ -57,7 +57,7 @@ public class electricitysummaryfrag extends Fragment {
         int month=Integer.valueOf(strdate.substring(4,6));
         int date=Integer.valueOf(strdate.substring(6));
         TextView datetime=rootview.findViewById(R.id.datetime);
-        datetime.setText(date+" "+month+" "+year);
+        datetime.setText(date+"/"+month+"/"+year);
 
 
         final TextView KWH=rootview.findViewById(R.id.KWH);

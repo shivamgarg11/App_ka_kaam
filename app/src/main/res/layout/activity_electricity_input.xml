@@ -127,7 +127,7 @@
                 android:id="@+id/electricityinput4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ENTER P.P.F"
+                android:hint="ENTER Panel P.F"
                 android:gravity="center"
                 android:inputType="numberDecimal"/>
 

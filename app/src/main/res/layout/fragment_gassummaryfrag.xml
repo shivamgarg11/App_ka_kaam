@@ -50,9 +50,9 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="140dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="INPUT :"/>
+            android:text="READING(m^3) :"/>
 
         <TextView
             android:id="@+id/input"
@@ -78,9 +78,9 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="140dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="DIFFERENCE :"/>
+            android:text="DIFFERENCE(m^3) :"/>
 
         <TextView
             android:id="@+id/difference"
@@ -106,7 +106,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="140dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="SCM :"/>
 
@@ -134,7 +134,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="140dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="MMBTO :"/>
 
@@ -162,9 +162,9 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="140dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="RIDE :"/>
+            android:text="RATE :"/>
 
         <TextView
             android:id="@+id/ride"
@@ -191,9 +191,9 @@
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="20dp"
-            android:layout_width="140dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="BILL :"/>
+            android:text="15 DAYS BILL :"/>
 
         <TextView
             android:id="@+id/bill"

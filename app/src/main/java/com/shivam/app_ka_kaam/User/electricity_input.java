@@ -181,7 +181,8 @@ public class electricity_input extends AppCompatActivity {
         obj.setPpf(input4);
         obj.setCal_pf((input1-lastvalue[0].getKwh())/(input2-lastvalue[0].getKvah()));
         obj.setDiffkwh(input1-lastvalue[0].getKwh());
-        obj.setDiffkvah(input2-lastvalue[0].getKvah());
+        double diffkvah=input2-lastvalue[0].getKvah();
+        obj.setDiffkvah(diffkvah);
 
         SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy HH:mm");
         String inputString1 = lastvalue[0].getDate();
@@ -194,8 +195,8 @@ public class electricity_input extends AppCompatActivity {
             if(diff==0)
                 diff=1;
 
-            obj.setAmount1(obj.getCal_pf()*constant[0].getC1()*constant[0].getC3()*15);
-            obj.setAmount2((obj.getCal_pf()*constant[0].getC2()*constant[0].getC3()*15*24)/diff);
+            obj.setAmount1(diffkvah*constant[0].getC1()*constant[0].getC3());
+            obj.setAmount2((diffkvah*constant[0].getC2()*constant[0].getC3()*24)/diff);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -212,11 +213,6 @@ public class electricity_input extends AppCompatActivity {
 
         final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
         final DatabaseReference myRef1 = database1.getReference("ELECTRICITY"+pathway).child("CONSTANTS");
-
-
-        //
-        myRef.setValue(new electricitylastvalue(timeelectricity,12,12));
-        //
 
 
         myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
