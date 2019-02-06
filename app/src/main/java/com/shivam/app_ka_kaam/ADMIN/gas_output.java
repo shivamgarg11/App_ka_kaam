@@ -612,7 +612,7 @@ public class gas_output extends AppCompatActivity {
 
     }
 
-    public String csvPart(String data, String name) {
+    public static String csvPart(String data, String name) {
 
         //        String a = "1,2,4,5,6";
         String filePath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/" + name + ".csv";
@@ -645,13 +645,14 @@ public class gas_output extends AppCompatActivity {
 
     public void sendNotif(String path)
     {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
 
-        Uri selectedUri = Uri.parse(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/");
-        intent.setDataAndType(selectedUri, "text/csv");
-        intent = Intent.createChooser(intent, "Open folder");
+//        String path = android.os.Environment.getExternalStorageDirectory() + "/" + "App_Ka_Kaam/";
+        Uri selectedUri = Uri.parse(android.os.Environment.getExternalStorageDirectory() + "/" + "App_Ka_Kaam/");
+        Intent intent = new Intent(Intent.ACTION_VIEW,selectedUri);
+
+        intent.setDataAndType(selectedUri, "resource/folder");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(gas_output.this, 0, intent, 0);
         createNotificationChannel();
 
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -667,7 +668,7 @@ public class gas_output extends AppCompatActivity {
         notificationManager.notify(0, mBuilder.build());
     }
 
-    private void createNotificationChannel() {
+    public void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
