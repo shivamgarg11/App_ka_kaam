@@ -164,7 +164,7 @@ public class oil_output extends AppCompatActivity {
 
             }
         });
-        csvPart(csvWrite, "Year");
+        csvPart(writeCSV, "Year");
         sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/Electricity/"+pathway+"/" + "Year" + ".csv");
 
 
@@ -455,12 +455,12 @@ public class oil_output extends AppCompatActivity {
     {
 
 //        String path = android.os.Environment.getExternalStorageDirectory() + "/" + "App_Ka_Kaam/";
-        Uri selectedUri = Uri.parse(android.os.Environment.getExternalStorageDirectory() + "/" + "App_Ka_Kaam/");
+        Uri selectedUri = Uri.parse(android.os.Environment.getExternalStorageDirectory() + "/" + "App_Ka_Kaam/Oil/");
         Intent intent = new Intent(Intent.ACTION_VIEW,selectedUri);
 
         intent.setDataAndType(selectedUri, "resource/folder");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(oil_output.this, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(oil_output.this, 0, intent,  PendingIntent.FLAG_CANCEL_CURRENT);
         createNotificationChannel();
 
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

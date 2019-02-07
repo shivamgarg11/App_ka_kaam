@@ -229,10 +229,11 @@ public class electricity_output extends AppCompatActivity {
 
     int year = Calendar.getInstance().get(Calendar.YEAR);
     public ArrayList<String> arr = new ArrayList<>();
-    String writeCSV = "";
+
 
 
     public void selYear() {
+        final String[] writeCSV = {""};
         final AlertDialog.Builder builder = new AlertDialog.Builder(electricity_output.this);
         View view = getLayoutInflater().inflate(R.layout.spinner_dialog, null);
         builder.setTitle("Select Year to View Report");
@@ -248,7 +249,7 @@ public class electricity_output extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
 
-                writeCSV += "year,month,date,bill,difference,input,mmbto,ride,scm,time,\n";
+                writeCSV[0] += "year,month,date,amount 1,amount 2,cal_pf,diffkvah,diffkwh,kvah,kwh,mpf,ppf\n";
                 final DatabaseReference myRef1 = database1.getReference("ELECTRICITY"+pathway).child(String.valueOf(spinner.getSelectedItem().toString()));
                 myRef1.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -256,18 +257,18 @@ public class electricity_output extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot yearIter : dataSnapshot.getChildren()) {
                                 Log.d("201999", "onDataChange: " + yearIter.getKey() + "End");
-                                writeCSV += spinner.getSelectedItem().toString() + ",";
-                                writeCSV += yearIter.getKey() + ",";
+                                writeCSV[0] += spinner.getSelectedItem().toString() + ",";
+                                writeCSV[0] += yearIter.getKey() + ",";
                                 for (DataSnapshot monthIter : yearIter.getChildren()) {
-                                    writeCSV += monthIter.getKey() + ",";
+                                    writeCSV[0] += monthIter.getKey() + ",";
                                     for (DataSnapshot dayIter : monthIter.getChildren()) {
-//                                            writeCSV += dayIter.
-                                        writeCSV += dayIter.getValue() + ",";
+                                        writeCSV[0] += dayIter.getValue() + ",";
                                     }
-                                    writeCSV += "\n";
+                                    writeCSV[0] += "\n";
                                 }
+                                csvPart(writeCSV[0], "Year");
                             }
-                            Log.d("writecsv", "onDataChange: " + writeCSV);
+                            Log.d("writecsv", "onDataChange: " + writeCSV[0]);
 
                         } else {
                             Toast.makeText(electricity_output.this, "Entry Doesn't Exist", Toast.LENGTH_LONG).show();
@@ -284,7 +285,7 @@ public class electricity_output extends AppCompatActivity {
 
             }
         });
-        csvPart(csvWrite, "Year");
+
         sendNotif(android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "App_Ka_Kaam/Electricity/"+pathway+"/" + "Year" + ".csv");
 
 
