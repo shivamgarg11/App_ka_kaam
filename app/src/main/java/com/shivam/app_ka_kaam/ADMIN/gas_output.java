@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -147,6 +148,9 @@ public class gas_output extends AppCompatActivity {
                                 if (selected == 0) {
                                     changeconstant();
                                 }
+                                if (selected == 2) {
+                                    resetpassword();
+                                }
 
 
                             }
@@ -219,6 +223,41 @@ public class gas_output extends AppCompatActivity {
 
 
 
+
+    }
+
+    public void resetpassword() {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(gas_output.this);
+        alertDialog.setTitle("RESET PASSWORD");
+        alertDialog.setMessage("Enter Password");
+
+        final EditText input = new EditText(gas_output.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+        alertDialog.setIcon(R.drawable.logoo);
+
+        alertDialog.setPositiveButton("SUBMIT",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String password = input.getText().toString();
+                        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                        final DatabaseReference myRef1 = database1.getReference("USER").child("PASSWORD");
+                        myRef1.child("strpassword").setValue(password);
+                        myRef1.child("numpassword").setValue(5);
+                    }});
+
+        alertDialog.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        alertDialog.show();
 
     }
 
