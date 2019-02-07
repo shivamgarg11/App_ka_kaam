@@ -223,6 +223,10 @@ public class gas_output extends AppCompatActivity {
     }
 
 
+
+
+
+
     public void changeconstant() {
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(gas_output.this);

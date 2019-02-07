@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -17,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,11 +27,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
-import com.shivam.app_ka_kaam.User.user;
+import com.shivam.app_ka_kaam.User.userpasscode;
 import com.shivam.app_ka_kaam.sampleUtil.Constants;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -122,6 +129,11 @@ public class MainActivity extends AppCompatActivity {
         ImageView userbtn=findViewById(R.id.user);
 
 
+        final int[] num = {0};
+        final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef1 = database1.getReference("USER").child("PASSWORD").child("numpassword");
+
+
         adminbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,8 +148,56 @@ public class MainActivity extends AppCompatActivity {
         userbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,user.class));
-                finish();
+
+                myRef1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        num[0] =dataSnapshot.getValue(Integer.class);
+                        if(num[0]<=0){
+                            FancyToast.makeText(MainActivity.this,"PLEASE CONTACT ADMIN FOR RESET OF PASSWORD", Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                        }else if(num[0]==2) {
+
+                            Calendar c = Calendar.getInstance();
+                            SimpleDateFormat dateformat = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
+                            String time = dateformat.format(c.getTime());
+
+                            SharedPreferences sp = getSharedPreferences("appkakaam" ,Context.MODE_PRIVATE);
+                            String sc  = sp.getString("userlastlogin","0");
+
+
+                            try {
+                                Date date1 = dateformat.parse(time);
+                                Date date2 = dateformat.parse(sc);
+                                double diff = TimeUnit.MILLISECONDS.toSeconds(date1.getTime() - date2.getTime());
+                                if(diff>=120){
+                                    Intent i=new Intent(MainActivity.this,userpasscode.class);
+                                    i.putExtra("turns",num[0]);
+                                    startActivity(i);
+                                    finish();
+                                }else{
+                                    FancyToast.makeText(MainActivity.this,"PLEASE WAIT FOR "+(120 -diff)+" SECONDS", Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+
+                                }
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+
+
+                        }else{
+                            Intent i=new Intent(MainActivity.this,userpasscode.class);
+                            i.putExtra("turns",num[0]);
+                            startActivity(i);
+                            finish();}
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                    }
+                });
+
+
             }
         });
         //////////////////////////////////////////////////////////
