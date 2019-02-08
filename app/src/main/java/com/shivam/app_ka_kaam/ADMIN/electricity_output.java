@@ -154,9 +154,6 @@ public class electricity_output extends AppCompatActivity {
                                     resetpassword();
                                 }
 
-
-
-
                             }
                         })
                         .setNegativeButton("Back", new DialogInterface.OnClickListener() {
