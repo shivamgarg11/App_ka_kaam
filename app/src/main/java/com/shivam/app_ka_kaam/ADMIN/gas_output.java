@@ -427,6 +427,8 @@ public class gas_output extends AppCompatActivity {
 
                                 }
                                 csvWrite += "\n";
+                                csvWrite += spinner.getSelectedItem().toString() + ",";
+                                csvWrite += spinner2.getSelectedItem().toString() + ",";
 
                             }
 
