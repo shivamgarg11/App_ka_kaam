@@ -4,6 +4,7 @@ package com.shivam.app_ka_kaam.Fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -32,7 +33,7 @@ public class electricitysummaryfrag extends Fragment {
     String strdate="";
     String pathway="";
     Context context;
-
+double from,to;
 
     public electricitysummaryfrag() {
         // Required empty public constructor
@@ -71,6 +72,26 @@ public class electricitysummaryfrag extends Fragment {
         final TextView amount1=rootview.findViewById(R.id.amount1);
         final TextView amount21=rootview.findViewById(R.id.amount21);
         final TextView amount2=rootview.findViewById(R.id.amount2);
+
+
+
+        final FirebaseDatabase database11 = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef11 = database11.getReference("ELECTRICITY"+pathway).child("RANGE");
+        myRef11.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                from =dataSnapshot.child("FROM").getValue(Double.class);
+                to =dataSnapshot.child("TO").getValue(Double.class);
+
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("TAG", "Failed to read value.", error.toException());
+            }
+        });
+
+
 
 
         final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
@@ -115,6 +136,14 @@ public class electricitysummaryfrag extends Fragment {
                     PF.setText((float)obj.getPpf()+"");
                     amount1.setText((float)obj.getAmount1()+"");
                     amount2.setText((float)obj.getAmount2()+"");
+
+                    if((float)obj.getCal_pf()>=from&&(float)obj.getCal_pf()<=to){
+                        CALPF.setTextColor(Color.GREEN);
+                        amount2.setTextColor(Color.GREEN);
+                    }else{
+                        CALPF.setTextColor(Color.RED);
+                        amount2.setTextColor(Color.RED);
+                    }
 
                 }else{
                     diffKWH.setText("NULL");

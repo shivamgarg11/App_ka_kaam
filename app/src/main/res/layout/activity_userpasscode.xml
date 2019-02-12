@@ -34,7 +34,7 @@
         android:background="#ce000000"/>
 
     <LinearLayout
-        android:visibility="gone"
+       android:visibility="gone"
         android:id="@+id/linearlogin"
         android:padding="20dp"
         android:layout_gravity="center"
@@ -56,22 +56,22 @@
             android:gravity="center"/>
 
         <Button
+            android:textColor="#fff"
             android:layout_margin="10dp"
             android:layout_gravity="center"
             style="@style/TextAppearance.AppCompat.Headline"
             android:textStyle="bold"
             android:text="LOGIN"
-            android:background="#acac4d4d"
+            android:background="#000000"
             android:id="@+id/passsubmit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:background="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/turnleft"
-            android:textColor="#fff"
+            android:textColor="#b10000"
             android:text=""
             android:gravity="center"/>
 

@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -35,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.Fragments.electricitysummaryfrag;
+import com.shivam.app_ka_kaam.Fragments.electricitymonthfrag;
 import com.shivam.app_ka_kaam.Java_objects.electricityconstants;
 import com.shivam.app_ka_kaam.R;
 
@@ -127,6 +129,19 @@ public class electricity_output extends AppCompatActivity {
         });
 
 
+
+
+        Button month=findViewById(R.id.month);
+        month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                electricitymonthfrag frag = new electricitymonthfrag(electricity_output.this,"ELECTRICITY"+pathway);
+                fragmentManager.beginTransaction().replace(R.id.frame, frag).commit();
+            }
+        });
+
+
         //////////////////////////////////
         Button setting =findViewById(R.id.setting);
         setting.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +163,10 @@ public class electricity_output extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 if(selected==0){
                                     changeconstant();
+                                }
+
+                                if(selected==1){
+                                    changerange();
                                 }
 
                                 if(selected==2){
@@ -559,7 +578,7 @@ public class electricity_output extends AppCompatActivity {
         alertDialog.setPositiveButton("SUBMIT",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        String password = input.getText().toString();
+                        int password = Integer.valueOf(input.getText().toString());
                         final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
                         final DatabaseReference myRef1 = database1.getReference("USER").child("PASSWORD");
                         myRef1.child("strpassword").setValue(password);
@@ -576,6 +595,59 @@ public class electricity_output extends AppCompatActivity {
         alertDialog.show();
 
     }
+
+
+    public void changerange() {
+
+        LayoutInflater li = LayoutInflater.from(electricity_output.this);
+        View changeconstant = li.inflate(R.layout.setgasrange, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                electricity_output.this);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(changeconstant);
+
+        final EditText c1 = (EditText) changeconstant
+                .findViewById(R.id.from);
+        final EditText c2 = (EditText) changeconstant
+                .findViewById(R.id.to);
+
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+
+                                final String strc1=c1.getText().toString()+"";
+                                final String strc2=c2.getText().toString()+"";
+
+                                if(strc1.length()==0||strc2.length()==0||Double.valueOf(strc1)>Double.valueOf(strc2)){
+                                    FancyToast.makeText(electricity_output.this,"INVALID INPUTS", Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                                }else{
+                                    final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+                                    final DatabaseReference myRef1 = database1.getReference("ELECTRICITY"+pathway).child("RANGE");
+                                    myRef1.child("FROM").setValue(Double.valueOf(strc1));
+                                    myRef1.child("TO").setValue(Double.valueOf(strc2));
+                                }
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+
+    }
+
 
     public void changeconstant(){
         // get prompts.xml view
