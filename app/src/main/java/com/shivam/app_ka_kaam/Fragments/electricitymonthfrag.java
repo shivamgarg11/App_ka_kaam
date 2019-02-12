@@ -70,7 +70,7 @@ public class electricitymonthfrag extends Fragment {
 
 
         final FirebaseDatabase database11 = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef11 = database11.getReference("ELECTRICITY"+path).child("RANGE");
+        final DatabaseReference myRef11 = database11.getReference(path).child("RANGE");
         myRef11.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
