@@ -6,9 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -20,6 +18,7 @@
         android:roundIcon="@drawable/logoo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ADMIN.adminPasscode"></activity>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -65,7 +64,7 @@
         <activity
             android:name=".ADMIN.electricity_output"
             android:screenOrientation="portrait" />
-        <activity android:name=".User.userpasscode"></activity>
+        <activity android:name=".User.userpasscode" />
     </application>
 
 </manifest>

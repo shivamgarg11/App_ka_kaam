@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
+import com.shivam.app_ka_kaam.ADMIN.adminPasscode;
 import com.shivam.app_ka_kaam.User.userpasscode;
 import com.shivam.app_ka_kaam.sampleUtil.Constants;
 
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView userbtn=findViewById(R.id.user);
 
 
-        final int[] num = {0};
+        final int[] numAd = {0};
         final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
         final DatabaseReference myRef1 = database1.getReference("USER").child("PASSWORD").child("numpassword");
 
@@ -137,13 +138,61 @@ public class MainActivity extends AppCompatActivity {
         adminbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,admin.class));
-                finish();
+                final DatabaseReference myRef2 = database1.getReference("ADMIN").child("PASSWORD").child("numpassword");
+                myRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        numAd[0] =dataSnapshot.getValue(Integer.class)+99;
+                        if(numAd[0]<=0){
+                            FancyToast.makeText(MainActivity.this,"Error", Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                        }else if(numAd[0]==2) {
+
+                            Calendar c = Calendar.getInstance();
+                            SimpleDateFormat dateformat = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
+                            String time = dateformat.format(c.getTime());
+
+                            SharedPreferences sp = getSharedPreferences("appkakaam" ,Context.MODE_PRIVATE);
+                            String sc  = sp.getString("adminlastlogin","0");
+
+
+                            try {
+                                Date date1 = dateformat.parse(time);
+                                Date date2 = dateformat.parse(sc);
+                                double diff = TimeUnit.MILLISECONDS.toSeconds(date1.getTime() - date2.getTime());
+                                if(diff>=120){
+                                    Intent i=new Intent(MainActivity.this,userpasscode.class);
+                                    i.putExtra("turns",numAd[0]);
+                                    startActivity(i);
+                                    finish();
+                                }else{
+                                    FancyToast.makeText(MainActivity.this,"PLEASE WAIT FOR "+(120 -diff)+" SECONDS", Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+
+                                }
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+
+
+                        }else{
+                            Intent i=new Intent(MainActivity.this, adminPasscode.class);
+                            i.putExtra("turnsAdmin",numAd[0]);
+                            startActivity(i);
+                            finish();}
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
 
 
+        final int[] num = {0};
 
         userbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
                         if(num[0]<=0){
                             FancyToast.makeText(MainActivity.this,"PLEASE CONTACT ADMIN FOR RESET OF PASSWORD", Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
                         }else if(num[0]==2) {
+                            Toast.makeText(MainActivity.this, "H", Toast.LENGTH_SHORT).show();
 
                             Calendar c = Calendar.getInstance();
                             SimpleDateFormat dateformat = new SimpleDateFormat("dd MM yyyy HH:mm:ss");

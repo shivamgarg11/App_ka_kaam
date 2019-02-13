@@ -118,7 +118,7 @@ public class userpasscode extends AppCompatActivity {
                 SimpleDateFormat dateformat = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
                 String time = dateformat.format(c.getTime());
                 SharedPreferences sp = getSharedPreferences("appkakaam" , Context.MODE_PRIVATE);
-                sp.edit().putString("userlastlogin",time).commit();
+                sp.edit().putString("userlastlogin",time).apply();
 
                 myRef11.setValue(--USERPASSLEFT[0]);
                 passcode.setText("");
