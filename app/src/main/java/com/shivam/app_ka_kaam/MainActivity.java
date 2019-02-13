@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -20,11 +21,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
 import com.shivam.app_ka_kaam.User.userpasscode;
@@ -49,6 +52,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+                final FirebaseDatabase database1 = FirebaseDatabase.getInstance();
+
+                final DatabaseReference myRef1 = database1.getReference("appkakaam");
+
+                myRef1.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Toast.makeText(MainActivity.this, "Added", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Toast.makeText(MainActivity.this, "Changed", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                        Toast.makeText(MainActivity.this, "Added", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
         if(!checkPermission()){
             requestPermission();
@@ -202,8 +238,8 @@ public class MainActivity extends AppCompatActivity {
         });
         //////////////////////////////////////////////////////////
 
-//        String s = String.valueOf(FirebaseInstanceId.getInstance().getToken());
-//        Log.d("TokenHere", "onCreate: "+s);
+        String s = String.valueOf(FirebaseInstanceId.getInstance().getToken());
+        Log.d("TokenHere", "onCreate: "+s);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
