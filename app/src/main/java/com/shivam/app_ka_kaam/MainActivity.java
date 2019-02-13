@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.github.tntkhang.gmailsenderlibrary.GMailSender;
+import com.github.tntkhang.gmailsenderlibrary.GmailListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +41,9 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import ir.mtajik.android.advancedsmsmanager.SmsHandler;
+import ir.mtajik.android.advancedsmsmanager.model.MySmsManager;
+
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -50,6 +55,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        GMailSender.withAccount("vrishank98@gmail.com", "01122818888As")
+                .withTitle("Hello")
+                .withBody("Hrrr")
+                .withSender(getString(R.string.app_name))
+                .toEmailAddress("vrishank98@gmail.com") // one or multiple addresses separated by a comma
+                .withListenner(new GmailListener() {
+                    @Override
+                    public void sendSuccess() {
+                        Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void sendFail(String err) {
+                        Toast.makeText(MainActivity.this, "Fail: " + err, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .send();
 
         if(!checkPermission()){
             requestPermission();
