@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        GMailSender.withAccount("vrishank98@gmail.com", "01122818888As")
+       /* GMailSender.withAccount("vrishank98@gmail.com", "01122818888As")
                 .withTitle("Hello")
                 .withBody("Hrrr")
                 .withSender(getString(R.string.app_name))
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Fail: " + err, Toast.LENGTH_SHORT).show();
                     }
                 })
-                .send();
+                .send();*/
 
         if(!checkPermission()){
             requestPermission();

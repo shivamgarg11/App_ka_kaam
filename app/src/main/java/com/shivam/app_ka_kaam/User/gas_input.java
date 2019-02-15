@@ -222,8 +222,8 @@ public class gas_input extends AppCompatActivity {
 
     public  void setnotify(String token){
         final String Legacy_SERVER_KEY = "AIzaSyAvM2ng-9ZVbHUzR2boRRQyBNnzSd9O1K0";
-        String msg = "this is test message,.,,.,.";
-        String title = "my title";
+        String msg = "USER HAS ENTERED OUT OF RANGE DATA";
+        String title = "WARNING";
         JSONObject obj = null;
         JSONObject objData = null;
         JSONObject dataobjData = null;
@@ -235,7 +235,7 @@ public class gas_input extends AppCompatActivity {
             objData.put("body", msg);
             objData.put("title", title);
             objData.put("sound", "default");
-            objData.put("icon", "icon_name"); //   icon_name image must be there in drawable
+            objData.put("icon","logoo"); //   icon_name image must be there in drawable
             objData.put("tag", token);
             objData.put("priority", "high");
 
