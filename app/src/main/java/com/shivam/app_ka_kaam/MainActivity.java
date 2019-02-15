@@ -19,12 +19,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-<<<<<<< HEAD
-=======
-
 import com.github.tntkhang.gmailsenderlibrary.GMailSender;
 import com.github.tntkhang.gmailsenderlibrary.GmailListener;
->>>>>>> 592b369c61bdcf930245972f06e1be2e7e6c1ef4
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -166,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 myRef2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        numAd[0] =dataSnapshot.getValue(Integer.class)+99;
+                        numAd[0] =dataSnapshot.getValue(Integer.class);
                         if(numAd[0]<=0){
                             FancyToast.makeText(MainActivity.this,"Error", Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
                         }else if(numAd[0]==2) {
