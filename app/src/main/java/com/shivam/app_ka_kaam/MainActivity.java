@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +28,6 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 import com.shivam.app_ka_kaam.ADMIN.admin;
 import com.shivam.app_ka_kaam.User.userpasscode;
 import com.shivam.app_ka_kaam.sampleUtil.Constants;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;

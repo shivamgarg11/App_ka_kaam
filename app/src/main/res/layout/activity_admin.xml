@@ -22,7 +22,7 @@
             android:text="ADMIN"
             style="@style/TextAppearance.AppCompat.Subhead"
             android:textStyle="bold"
-            android:textColor="#fff"
+            android:textColor="#2E6D30"
             android:background="#8a0a1556"/>
 
         <ImageView

@@ -50,9 +50,10 @@
     </LinearLayout>
 
     <ListView
+        android:background="#FFFFFF"
         android:id="@+id/gaslist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
     </ListView>
 
 </LinearLayout>

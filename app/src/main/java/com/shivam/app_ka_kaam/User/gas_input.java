@@ -13,6 +13,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,10 +34,15 @@ import com.shivam.app_ka_kaam.Java_objects.gaslastvalue;
 import com.shivam.app_ka_kaam.MainActivity;
 import com.shivam.app_ka_kaam.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class gas_input extends AppCompatActivity {
@@ -39,6 +53,7 @@ public class gas_input extends AppCompatActivity {
      gasconstants[] constant = new gasconstants[1];
     AlertDialog alertDialog;
     ProgressBar loader;
+    double from,to;
 
 
     @Override
@@ -52,6 +67,7 @@ public class gas_input extends AppCompatActivity {
         TextView path=findViewById(R.id.path);
         path.setText("USER/GAS/"+pathway);
 
+        getrange();
 
         TextView datetime=findViewById(R.id.datetime);
         gettimedate(datetime);
@@ -121,6 +137,7 @@ public class gas_input extends AppCompatActivity {
                             final DatabaseReference myRef = database.getReference("GAS" + pathway).child(year + "").child(month + "");
 
 
+
                             //Writing lastvalue
                             FirebaseDatabase database1 = FirebaseDatabase.getInstance();
                             final DatabaseReference myRef1 = database1.getReference("GAS" + pathway).child("LASTVALUE");
@@ -131,6 +148,28 @@ public class gas_input extends AppCompatActivity {
                                     if (!dataSnapshot.hasChild(date + "")) {
                                         gas_object obj = insertvalues(Double.valueOf(data));
                                         myRef.child(date + "").setValue(obj);
+
+                                        if(obj.getBill()<from||obj.getBill()>to) {
+                                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                            final DatabaseReference myRef = database.getReference("NOTIFY");
+                                            myRef.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                                        String str = postSnapshot.getValue(String.class);
+                                                        setnotify(str);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError error) {
+
+                                                }
+                                            });
+
+                                        }
+
+
                                         FancyToast.makeText(gas_input.this, "THANK YOU FOR UPDATING \n\n YOU HAVE BEEN LOGGED OUT", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, false).show();
                                         gaslastvalue obj1 = new gaslastvalue(timegas, Double.valueOf(data));
                                         myRef1.setValue(obj1);
@@ -161,6 +200,86 @@ public class gas_input extends AppCompatActivity {
     }
 
 
+    public void getrange(){
+        final FirebaseDatabase database11 = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef11 = database11.getReference("GAS" + pathway).child("RANGE");
+        myRef11.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                from =dataSnapshot.child("FROM").getValue(Double.class);
+                to =dataSnapshot.child("TO").getValue(Double.class);
+
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("TAG", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+
+
+    public  void setnotify(String token){
+        final String Legacy_SERVER_KEY = "AIzaSyAvM2ng-9ZVbHUzR2boRRQyBNnzSd9O1K0";
+        String msg = "this is test message,.,,.,.";
+        String title = "my title";
+        JSONObject obj = null;
+        JSONObject objData = null;
+        JSONObject dataobjData = null;
+
+        try {
+            obj = new JSONObject();
+            objData = new JSONObject();
+
+            objData.put("body", msg);
+            objData.put("title", title);
+            objData.put("sound", "default");
+            objData.put("icon", "icon_name"); //   icon_name image must be there in drawable
+            objData.put("tag", token);
+            objData.put("priority", "high");
+
+            dataobjData = new JSONObject();
+            dataobjData.put("text", msg);
+            dataobjData.put("title", title);
+
+            obj.put("to", token);
+            //obj.put("priority", "high");
+
+            obj.put("notification", objData);
+            obj.put("data", dataobjData);
+            Log.e("!_@rj@_@@_PASS:>", obj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, "https://fcm.googleapis.com/fcm/send", obj,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e("!_@@_SUCESS", response + "");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("!_@@_Errors--", error + "");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "key=" + Legacy_SERVER_KEY);
+                params.put("Content-Type", "application/json");
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        int socketTimeout = 1000 * 60;// 60 seconds
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsObjRequest.setRetryPolicy(policy);
+        requestQueue.add(jsObjRequest);
+    }
 
 
     public  gas_object insertvalues(double input){
